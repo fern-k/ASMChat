@@ -21,7 +21,7 @@ Exit         PROTO, code: DWORD
 ;------------- Code ----------------;
 .data
 connectErrMsg     BYTE "Connect server failed!", 0
-greetingMsg       BYTE "Good morning Ser!", 0dh, 0ah, 0
+greetingMsg       BYTE "[Client said] Good morning Ser!", 0dh, 0ah, 0
 .const
 defaultServerIP   BYTE  "127.0.0.1", 0
 defaultServerPort DWORD 9798

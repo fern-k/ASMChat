@@ -23,7 +23,7 @@ Exit         PROTO, code: DWORD
 bindingErrMsg     BYTE "Binding socket failed!", 0dh, 0ah, 0
 acceptErrMsg      BYTE "Accept connection failed!", 0dh, 0ah, 0
 listeningMsg      BYTE "start listening!", 0dh, 0ah, 0
-helloMsg          BYTE "Hey, I'm server and heard your greeting. Let's start communication!", 0dh, 0ah, 0
+helloMsg          BYTE "[Server said] Hey, I heard your greeting, nice to meet u!", 0dh, 0ah, 0
 .const
 defaultServerPort DWORD 9798
 .code
