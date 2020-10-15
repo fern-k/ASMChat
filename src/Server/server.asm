@@ -1,78 +1,91 @@
 ;*********** Server Entry **********;
 
 
-include Util/util.inc
+INCLUDE ./server.inc
 
 
 ;------------- Code ----------------;
+
 .data
-cmdBuffer         BYTE 0
-lengthOfCmdBuffer DWORD 1
+cmdBuffer         BYTE 4 DUP(?)
+lengthOfCmdBuffer DWORD SIZEOF cmdBuffer
 .const
-defaultServerPort DWORD 9798
-bindingErrMsg     BYTE "Binding socket failed!", 0dh, 0ah, 0
-acceptErrMsg      BYTE "Accept connection failed!", 0dh, 0ah, 0
 serverOnlineMsg   BYTE "[Server online]", 0dh, 0ah, 0
 helloMsg          BYTE "[Server said] Hey, I heard your greeting, nice to meet u!", 0dh, 0ah, 0
-CMD_LOGIN         BYTE "L"
-CMD_REGISTER      BYTE "R"
-CMD_MESSAGE       BYTE "M"
 MSG_L BYTE "Got Login!", 0dh, 0ah, 0
 MSG_R BYTE "Got Register!", 0dh, 0ah, 0
 MSG_O BYTE "Got Other!", 0dh, 0ah, 0
-FMG_DN BYTE "%d", 0dh, 0ah, 0
 
 .code
 Main PROC
-    LOCAL sockAddr: sockaddr_in
-    LOCAL serverSocket: DWORD
-    LOCAL clientSocket: DWORD
+    LOCAL serverSockfd: DWORD
+    LOCAL clientSockfd: DWORD
     LOCAL buffer[1024]: BYTE
-    ; Initiate server to online
-    INVOKE CreateSocket
-    mov serverSocket, eax
-    INVOKE EnsureSocket, serverSocket
-    INVOKE htons, defaultServerPort
-    mov sockAddr.sin_port, ax
-    mov sockAddr.sin_family, AF_INET
-    mov sockAddr.sin_addr, INADDR_ANY
-    INVOKE bind, serverSocket, ADDR sockAddr, SIZEOF sockAddr
-    .IF eax
-        INVOKE MessageBox, NULL, ADDR bindingErrMsg, ADDR bindingErrMsg, MB_OK
-        INVOKE Exit, 1
+
+    INVOKE ServerUp, defaultServerPort
+    .IF eax != COMMON_OK
+        INVOKE Util_Exit, 1
+        ret
     .ENDIF
-    INVOKE listen, serverSocket, 5
+    mov    serverSockfd, ebx
     INVOKE crt_printf, ADDR serverOnlineMsg
-    INVOKE accept, serverSocket, NULL, 0
+    INVOKE accept, serverSockfd, NULL, 0
     .IF eax == INVALID_SOCKET
-        INVOKE MessageBox, NULL, ADDR acceptErrMsg, ADDR acceptErrMsg, MB_OK
-        INVOKE Exit, 1
+        INVOKE Util_Exit, 1
+        ret
     .ENDIF
-    ; Communication with client
-    mov clientSocket, eax
-    INVOKE recv, clientSocket, ADDR buffer, SIZEOF buffer, 0
+    mov clientSockfd, eax
+    INVOKE recv, clientSockfd, ADDR buffer, SIZEOF buffer, 0
     INVOKE crt_printf, ADDR buffer
-    INVOKE send, clientSocket, ADDR helloMsg, SIZEOF helloMsg, 0
+    INVOKE send, clientSockfd, ADDR helloMsg, SIZEOF helloMsg, 0
 
-    INVOKE recv, clientSocket, ADDR cmdBuffer, lengthOfCmdBuffer, 0
+    INVOKE recv, clientSockfd, ADDR cmdBuffer, lengthOfCmdBuffer, 0
 
-    mov al, cmdBuffer
+    mov eax, DWORD PTR cmdBuffer
 
-    .IF al == CMD_LOGIN
+    .IF eax == REQ_LOGIN
         INVOKE crt_printf, ADDR MSG_L
-    .ELSEIF al == CMD_REGISTER
+    .ELSEIF eax == REQ_REGISTER
         INVOKE crt_printf, ADDR MSG_R
     .ELSE
         INVOKE crt_printf, ADDR MSG_O
     .ENDIF
-    mov eax, 0
-    mov al, cmdBuffer
-    INVOKE crt_printf, ADDR FMG_DN, eax
-    INVOKE closesocket, clientSocket
-    INVOKE closesocket, serverSocket
-    INVOKE Exit, 0
+    INVOKE closesocket, clientSockfd
+    INVOKE closesocket, serverSockfd
+    INVOKE Util_Exit, 0
     ret
+
 Main ENDP
+
+
+ServerUp PROC, port: DWORD
+    LOCAL sockAddr: sockaddr_in
+    LOCAL sockfd: DWORD
+
+    INVOKE Util_CreateSocket
+    .IF eax != COMMON_OK
+        mov eax, COMMON_FAILED
+        ret
+    .ENDIF
+    mov    sockfd, ebx
+    INVOKE htons, port
+    mov sockAddr.sin_port, ax
+    mov sockAddr.sin_addr, INADDR_ANY
+    mov sockAddr.sin_family, AF_INET
+    INVOKE bind, sockfd, ADDR sockAddr, SIZEOF sockAddr
+    .IF eax == SOCKET_ERROR
+        mov eax, COMMON_FAILED
+        ret
+    .ENDIF
+    INVOKE listen, sockfd, 5
+    mov ebx, sockfd
+    mov eax, COMMON_OK
+    ret
+
+ServerUp ENDP
+
+
+
 
 
 END Main

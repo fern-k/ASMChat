@@ -21,6 +21,9 @@
   <ItemGroup>
     <MASM Include="client.asm" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="client.inc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{E2130389-58E9-4661-969A-8B4CA1ED6400}</ProjectGuid>

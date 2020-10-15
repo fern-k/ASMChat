@@ -7,7 +7,7 @@
 
 
 ### Preparation
-After clone this repo, please run `script/add_masm32_to_env.cmd` first, which add masm32 folder to your user enviroment variable `%MASM32%`. Building projects rely on `%MASM32%/(include|lib)`.
+After install MASM32 and clone this repo, please run `script/add_masm32_to_env.cmd` first, which add masm32 folder to your user enviroment variable `%MASM32%`. Building projects rely on `%MASM32%/(include|lib)`.
 
 
 ### How to build
