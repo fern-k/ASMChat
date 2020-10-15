@@ -6,8 +6,7 @@ setlocal
 
 echo Please select the folder of MASM32
 
-set "psCommand="(new-object -COM 'Shell.Application')^
-.BrowseForFolder(0,'Please select the folder of MASM32.',0,0).self.path""
+set psCommand="(new-object -COM 'Shell.Application').BrowseForFolder(0,'Please select the folder of MASM32.',0,0).self.path"
 
 for /f "usebackq delims=" %%I in (`powershell %psCommand%`) do set "folder=%%I"
 
