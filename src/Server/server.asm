@@ -1,7 +1,7 @@
 ;*********** Server Entry **********;
 
 
-include Commons/commons.inc
+include Util/util.inc
 
 
 ;------------- Code ----------------;

@@ -1,6 +1,6 @@
 
 
-INCLUDE commons.inc
+INCLUDE ./util.inc
 
 
 .code
