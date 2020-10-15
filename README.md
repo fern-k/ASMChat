@@ -2,11 +2,12 @@
 
 - **Projects**: Server, Client and Util
 - **Target**: Windows on x86
+- **Dependency**: [MASM32](https://www.masm32.com/)
 - **IDE**: [Visual Studio 2019 Community](https://visualstudio.microsoft.com/vs/older-downloads/)
 
 
 ### Preparation
-After clone this repo, please run `script/add_masm32_to_env.cmd` first, which add masm32 folder to your user enviroment variables. Our building rely on `%MASM32%/(include|lib)`.
+After clone this repo, please run `script/add_masm32_to_env.cmd` first, which add masm32 folder to your user enviroment variable `%MASM32%`. Building projects rely on `%MASM32%/(include|lib)`.
 
 
 ### How to build
@@ -17,7 +18,7 @@ To build just one project, right click any of them and select `Build` or `Rebuil
 
 Make sure the building configuration is set to x86 target instead of x64.
 
-The executable files will be generated under `build.(Debug|Release)` depending on your configure. If release mode is broken, try debug mode first.
+The executable files will be generated under `build.(Debug|Release)` depending on your configure. Try debug mode first if release mode is broken.
 
 > The release build is unsafe for SAFESEH image, which will cause anti-virus softwares report it as a virus. to skip this error, go *project properties → Linker → Advanced → Image Has Safe Exception Handlers* and choose `No(/SAFESEH:No)`. Though compilation is successful in this way, the executable files is still rejected by most of anti-virus softwares. Debug build won't encounter this problem.
 
@@ -31,11 +32,8 @@ The two projects (Server and Client) were set as startup projects together, so b
 
 Alternatively, you can just right click a project and choose *Debug → Start New Instance* without changing Startup Project.
 
-<br/>
 
 ------
-
-<br/>
 
 *If debugging is the process of removing software bugs, then programming must be the process of putting them in. -- Edsger Dijkstra*
 
