@@ -20,6 +20,6 @@ The executable files will be generated under `Build.(Debug|Release)` depending o
 The two projects were set as startup projects together, so both of them will start in debug mode when press `F5`.
 
 - To start just one project when press F5, right click a project and choose *Properties → Set as Startup Project*.
-- To start both of these projects, right click solution and choose *Properties → Common Properties → Startup Project* and select `Multiple startup projects` with Action `Start`.
+- To start both of these projects, right click solution and choose *Properties → Common Properties → Startup Project* and select `Multiple startup projects` with action `Start`.
 
 Alternatively, you can just right click a project and choose *Debug → Start New Instance* without changing Startup Project.

@@ -23,6 +23,7 @@
     <ProjectGuid>{B7E75F38-129E-4E2E-9754-413CE32B96CE}</ProjectGuid>
     <RootNamespace>Client</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Client</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -94,11 +95,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(MASM32)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MASM32)\lib;$(SolutionDir)Build.$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;Commons.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <MASM>
-      <IncludePaths>$(MASM32)\include;%(IncludePaths)</IncludePaths>
+      <IncludePaths>$(MASM32)\include;$(SolutionDir);%(IncludePaths)</IncludePaths>
     </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
