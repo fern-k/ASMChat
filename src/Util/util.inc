@@ -18,7 +18,7 @@ INCLUDE ws2_32.inc
 ; Util_CreateSocket:
 ; Args: None
 ; Rets:
-;       eax -> errcode
+;       eax -> {  COMMON_OK, COMMON_FAILED  }
 ;       ebx -> socket
 ;------------------------------------
 Util_CreateSocket PROTO
