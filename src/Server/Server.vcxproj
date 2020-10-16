@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <MASM Include="database.asm" />
     <MASM Include="server.asm" />
   </ItemGroup>
   <ItemGroup>

@@ -85,7 +85,44 @@ ServerUp PROC, port: DWORD
 ServerUp ENDP
 
 
+HandleRequest PROC, sockfd: DWORD
+    LOCAL  buffer[1024]: BYTE
 
+    INVOKE recv, sockfd, ADDR buffer, SIZEOF buffer, 0
+    mov    eax, DWORD PTR buffer
+    .IF eax == REQ_LOGIN
+        INVOKE Util_SendCode, sockfd, COMMON_OK
+        INVOKE HandleLogin, sockfd
+    .ELSEIF eax == REQ_REGISTER
+    .ELSE
+    .ENDIF
+    ret
+
+HandleRequest ENDP
+
+
+HandleLogin PROC, sockfd: DWORD
+    LOCAL userbuf[1024]: BYTE
+    LOCAL pswdbuf[1024]: BYTE
+
+    INVOKE crt_memset, ADDR userbuf, 0, SIZEOF userbuf
+    INVOKE crt_memset, ADDR pswdbuf, 0, SIZEOF pswdbuf
+    INVOKE recv, sockfd, ADDR userbuf, SIZEOF userbuf, 0
+    INVOKE recv, sockfd, ADDR pswdbuf, SIZEOF pswdbuf, 0
+    INVOKE IsUserExist, ADDR userbuf
+    .IF eax != COMMON_OK
+        INVOKE Util_SendCode, sockfd, LOGIN_USER_UNKNOWN
+        ret
+    .ENDIF
+    INVOKE IsPswdCorrect, ADDR pswdbuf
+    .IF eax != COMMON_OK
+        INVOKE Util_SendCode, sockfd, LOGIN_PSWD_WRONG
+        ret
+    .ENDIF
+
+    ret
+
+HandleLogin ENDP
 
 
 END Main

@@ -16,6 +16,29 @@ INCLUDE Util/util.inc
 ;------------------------------------
 ServerUp PROTO,
     port: DWORD
+;------------------------------------
+; HandleRequest:
+; Args:
+;       sockfd
+; Rets:
+;       eax -> {  COMMON_OK, COMMON_FAILED  }
+;------------------------------------
+HandleRequest PROTO,
+    sockfd: DWORD
+;------------------------------------
+; HandleLogin:
+; Args:
+;       sockfd
+; Rets:
+;       eax -> {  COMMON_OK, COMMON_FAILED  }
+;------------------------------------
+HandleLogin PROTO,
+    sockfd: DWORD
+IsUserExist PROTO,
+    user: PTR BYTE
+IsPswdCorrect PROTO,
+    pswd: PTR BYTE
+
 
 
 

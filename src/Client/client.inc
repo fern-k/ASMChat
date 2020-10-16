@@ -5,7 +5,6 @@ CLIENT_HEADER PROTO
 
 INCLUDE Util/util.inc
 
-
 ;------------------------------------
 ; Connect:
 ; Args:

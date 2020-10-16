@@ -27,7 +27,7 @@ Main PROC
     INVOKE recv, sockfd, ADDR buffer, SIZEOF buffer, 0
     INVOKE crt_printf, ADDR buffer
 
-    INVOKE send, sockfd, ADDR REQ_REGISTER, CODE_LEN, 0
+    INVOKE Util_SendCode, sockfd, REQ_REGISTER
 
     INVOKE closesocket, sockfd
     INVOKE Util_Exit, 0
@@ -68,7 +68,7 @@ Login PROC, sockfd: DWORD, user: PTR BYTE, pswd: PTR BYTE
     LOCAL  pswd_len: DWORD
     LOCAL  buffer[1024]: BYTE
 
-    INVOKE send, sockfd, ADDR REQ_LOGIN, CODE_LEN, 0
+    INVOKE Util_SendCode, sockfd, REQ_LOGIN
     INVOKE recv, sockfd, ADDR buffer, SIZEOF buffer, 0
     mov    eax, DWORD PTR buffer
     .IF eax != COMMON_OK

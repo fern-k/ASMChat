@@ -23,12 +23,24 @@ INCLUDE ws2_32.inc
 ;------------------------------------
 Util_CreateSocket PROTO
 ;------------------------------------
+; Util_SendCode:
+; Args:
+;       sockfd -> target socket to send code
+;       code -> the code to send
+; Rets:
+;       eax -> {  COMMON_OK, COMMON_FAILED  }
+;       ebx -> socket
+;------------------------------------
+Util_SendCode PROTO,
+    sockfd: DWORD,
+    code: DWORD
+;------------------------------------
 ; Exit: Exit program.
 ; Args:
-;       code
+;       exitcode -> exit code
 ; Rets: None
 ;------------------------------------
-Util_Exit PROTO, code: DWORD
+Util_Exit PROTO, exitcode: DWORD
 
 
 .const
