@@ -18,6 +18,12 @@
     <MASM Include="client.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="model.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
+    <MASM Include="view.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="client.inc">

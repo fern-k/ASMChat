@@ -135,7 +135,7 @@
       <AdditionalLibraryDirectories>$(MASM32)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <MASM>
-      <IncludePaths>$(MASM32)\include;%(IncludePaths)</IncludePaths>
+      <IncludePaths>$(MASM32)\include;$(SolutionDir)\src;%(IncludePaths)</IncludePaths>
     </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,6 +158,7 @@
     <MASM Include="util.asm" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="debug.inc" />
     <None Include="util.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

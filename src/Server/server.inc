@@ -4,6 +4,7 @@ SERVER_HEADER PROTO
 
 
 INCLUDE Util/util.inc
+INCLUDE Util/debug.inc
 
 
 ;------------------------------------
