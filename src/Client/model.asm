@@ -1,14 +1,14 @@
-
 INCLUDE ./client.inc
 
+
+HandleLoginResponse PROTO
+ParseFriendList     PROTO, flistBuffer: PTR BYTE, flistBufLen: DWORD
 
 
 FriendModel STRUCT
     username BYTE 100 DUP(0)
     status DWORD 0
 FriendModel ENDS
-
-
 
 ClientModel STRUCT
     sockfd DWORD 0
@@ -19,6 +19,8 @@ ClientModel ENDS
 
 .data
 clientModelInstance ClientModel <>
+
+
 .code
 GetSockfd PROC, sockbuf: PTR DWORD
     INVOKE crt_memcpy, sockbuf, OFFSET clientModelInstance.sockfd, TYPE DWORD
@@ -87,6 +89,17 @@ DispatchConnect PROC, ip: PTR BYTE, port: DWORD
     @RET_OK
 
 DispatchConnect ENDP
+
+
+DispatchDisconnect PROC
+    LOCAL sockfd:  DWORD
+
+    INVOKE GetSockfd, ADDR sockfd
+    INVOKE closesocket, sockfd
+    @RET_FAILED_IF_SOCKET_ERROR
+    @RET_OK
+
+DispatchDisconnect ENDP
 
 
 DispatchLogin PROC, user: PTR BYTE, pswd: PTR BYTE

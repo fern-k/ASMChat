@@ -107,6 +107,7 @@ HandleLogin PROC, sockfd: DWORD
     LOCAL userbuf[1024]: BYTE
     LOCAL pswdbuf[1024]: BYTE
 
+    @DEBUG A2
     INVOKE crt_memset, ADDR userbuf, 0, SIZEOF userbuf
     INVOKE crt_memset, ADDR pswdbuf, 0, SIZEOF pswdbuf
     INVOKE recv, sockfd, ADDR userbuf, SIZEOF userbuf, 0

@@ -20,14 +20,12 @@ Main PROC
     mov    sockfd, ebx
     INVOKE crt_printf, ADDR connectOkMsg
 
-
     ; INVOKE ViewEntry
-
 
     INVOKE DispatchLogin, ADDR testingUser, ADDR testingPswd
     ;INVOKE HandleServerMessage
 
-    INVOKE closesocket, sockfd
+    INVOKE DispatchDisconnect
     INVOKE Util_Exit, 0
     ret
 
