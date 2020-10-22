@@ -24,6 +24,9 @@
     <MASM Include="view.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="controller.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="client.inc">

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="client.asm" />
+    <MASM Include="controller.asm" />
     <MASM Include="model.asm" />
     <MASM Include="view.asm" />
   </ItemGroup>

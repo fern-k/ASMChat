@@ -8,17 +8,11 @@ INCLUDE Util/debug.inc
 
 
 ;********* Client Model Part ********;
-DispatchConnect     PROTO, ip: PTR BYTE, port: DWORD
-DispatchDisconnect  PROTO
-DispatchLogin       PROTO, user: PTR BYTE, pswd: PTR BYTE
-DispatchRegister    PROTO
-DispatchSendText    PROTO
-HandleServerMessage PROTO
 GetSockfd           PROTO, sockbuf: PTR DWORD
 SetSockfd           PROTO, newsock: DWORD
+ParseFriendList     PROTO, flistBuffer: PTR BYTE, flistBufLen: DWORD
 
-
-;********* Client UI Part ********;
+;********* Client View Part ********;
 ViewEntry              PROTO
 UpdateView             PROTO
 LoginCallback          PROTO
@@ -26,6 +20,15 @@ RegisterCallback       PROTO
 SendTextCallback       PROTO
 AddFriendCallback      PROTO
 NotificationListener   PROTO
+
+;********* Client Controller Part ********;
+HandleServerMessage PROTO
+DispatchConnect     PROTO, ip: PTR BYTE, port: DWORD
+DispatchDisconnect  PROTO
+DispatchLogin       PROTO, user: PTR BYTE, pswd: PTR BYTE
+DispatchRegister    PROTO
+DispatchSendText    PROTO
+
 
 
 ENDIF ; CLIENT_HEADER
