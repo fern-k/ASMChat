@@ -1,10 +1,5 @@
 ;*********** Client Entry **********;
-
-
 INCLUDE ./client.inc
-
-
-;------------- Code ----------------;
 
 .const
 testingUser       BYTE "User0", 0
@@ -23,7 +18,7 @@ Main PROC
     ; INVOKE ViewEntry
 
     INVOKE DispatchLogin, ADDR testingUser, ADDR testingPswd
-    ;INVOKE HandleServerMessage
+    ;INVOKE DealwithServerMessage
 
     INVOKE DispatchDisconnect
     INVOKE Util_Exit, 0

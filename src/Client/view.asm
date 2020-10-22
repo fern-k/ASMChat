@@ -5,9 +5,9 @@ INCLUDE ./client.inc
 .code
 
 
-UIEntry PROC
+ViewEntry PROC
     ret
-UIEntry ENDP
+ViewEntry ENDP
 
 
 LoginCallback PROC
@@ -20,14 +20,20 @@ RegisterCallback PROC
 RegisterCallback ENDP
 
 
-HandleSendTextResponse PROC
-    ret
-HandleSendTextResponse ENDP
-
-
 SendTextCallback PROC
     ret
 SendTextCallback ENDP
+
+
+AddFriendCallback PROC
+    ret
+AddFriendCallback ENDP
+
+
+NotificationListener PROC
+    ret
+NotificationListener ENDP
+
 
 
 END

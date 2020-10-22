@@ -1,8 +1,6 @@
 INCLUDE ./client.inc
 
 
-
-
 FriendModel STRUCT
     username BYTE 100 DUP(0)
     status DWORD 0

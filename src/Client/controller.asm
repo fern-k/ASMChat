@@ -50,7 +50,7 @@ DispatchLogin PROC, user: PTR BYTE, pswd: PTR BYTE
 DispatchLogin ENDP
 
 
-HandleServerMessage PROC
+DealwithServerMessage PROC
     LOCAL sockfd: DWORD
     LOCAL codebuf: DWORD
 
@@ -73,7 +73,7 @@ HandleServerMessage PROC
     .ENDW
     ret
 
-HandleServerMessage ENDP
+DealwithServerMessage ENDP
 
 
 .data
