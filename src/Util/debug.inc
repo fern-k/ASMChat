@@ -1,40 +1,22 @@
-;************ useful_str Header **********;
-IFNDEF USEFUL_STR_HEADER
-USEFUL_STR_HEADER PROTO
+;************ debug Header **********;
+IFNDEF DEBUG_HEADER
+DEBUG_HEADER PROTO
 
 
 ;--------------- Debug ---------------;
-; Example: @DEBUG A0 (Marker see bellow section)
+; Example: @DEBUG A0
+; (See marker in bellow section)
 @DEBUG MACRO marker
     INVOKE crt_printf, ADDR marker
 ENDM
-
-@DBPRINT MACRO fmt, d
-    INVOKE crt_printf, ADDR fmt, d
+; Example: @DBPRINT FMT_DWORD_ENDL, a_dword_value
+; (See formatter in bellow section)
+@DBPRINT MACRO formatter, d
+    INVOKE crt_printf, ADDR formatter, d
 ENDM
 
 
 .const
-
-;------------- Formatter -------------;
-FMT_SP             BYTE " ", 0
-FMT_ENDL           BYTE 0dh, 0ah, 0
-FMT_DWORD          BYTE "%u", 0
-FMT_SDWORD         BYTE "%d", 0
-FMT_STRING         BYTE "%s", 0
-FMT_DWORD_ENDL     BYTE "%u", 0dh, 0ah, 0
-FMT_SDWORD_ENDL    BYTE "%d", 0dh, 0ah, 0
-FMT_STRING_ENDL    BYTE "%s", 0dh, 0ah, 0
-FMT_DWORD_SP       BYTE "%u ", 0
-FMT_SDWORD_SP      BYTE "%d ", 0
-FMT_STRING_SP      BYTE "%s ", 0
-FMT_DWORD_SP_ENDL  BYTE "%u ", 0dh, 0ah, 0
-FMT_SDWORD_SP_ENDL BYTE "%d ", 0dh, 0ah, 0
-FMT_STRING_SP_ENDL BYTE "%s ", 0dh, 0ah, 0
-FMT_DWORD_HEX      BYTE "0x%08x", 0
-FMT_SDWORD_HEX     BYTE "0x%08x", 0
-
-
 ;------------ Marker -----------;
 A0 BYTE "A0", 0dh, 0ah, 0
 A1 BYTE "A1", 0dh, 0ah, 0
@@ -78,4 +60,24 @@ D8 BYTE "D8", 0dh, 0ah, 0
 D9 BYTE "D9", 0dh, 0ah, 0
 
 
-ENDIF ; USEFUL_STR_HEADER
+;------------- Formatter -------------;
+FMT_SP             BYTE " ", 0
+FMT_ENDL           BYTE 0dh, 0ah, 0
+FMT_DWORD          BYTE "%u", 0
+FMT_SDWORD         BYTE "%d", 0
+FMT_STRING         BYTE "%s", 0
+FMT_DWORD_ENDL     BYTE "%u", 0dh, 0ah, 0
+FMT_SDWORD_ENDL    BYTE "%d", 0dh, 0ah, 0
+FMT_STRING_ENDL    BYTE "%s", 0dh, 0ah, 0
+FMT_DWORD_SP       BYTE "%u ", 0
+FMT_SDWORD_SP      BYTE "%d ", 0
+FMT_STRING_SP      BYTE "%s ", 0
+FMT_DWORD_SP_ENDL  BYTE "%u ", 0dh, 0ah, 0
+FMT_SDWORD_SP_ENDL BYTE "%d ", 0dh, 0ah, 0
+FMT_STRING_SP_ENDL BYTE "%s ", 0dh, 0ah, 0
+FMT_DWORD_HEX      BYTE "0x%08x", 0
+FMT_SDWORD_HEX     BYTE "0x%08x", 0
+
+
+
+ENDIF ; DEBUG_HEADER
