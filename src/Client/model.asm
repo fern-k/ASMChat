@@ -1,18 +1,6 @@
 INCLUDE ./client.inc
 
 
-FriendModel STRUCT
-    username BYTE 100 DUP(0)
-    status DWORD 0
-FriendModel ENDS
-
-ClientModel STRUCT
-    sockfd DWORD 0
-    friendList FriendModel 100 DUP(<>)
-    friendNumb DWORD 0
-ClientModel ENDS
-
-
 .data
 clientModelInstance ClientModel <>
 
