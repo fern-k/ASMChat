@@ -62,13 +62,13 @@ DealwithServerMessage PROC
         .IF eax > LOGIN_CODE_START && eax < LOGIN_CODE_END
             INVOKE DealwithLoginResponse
         .ELSEIF eax > REGISTER_CODE_START && eax < REGISTER_CODE_END
-            ;INVOKE RegisterCallback
+            INVOKE RegisterCallback
         .ELSEIF eax > SENDTEXT_CODE_START && eax < SENDTEXT_CODE_END
-            ;INVOKE SendTextCallback
+            INVOKE SendTextCallback
         .ELSEIF eax > ADDFRIEND_CODE_START && eax < ADDFRIEND_CODE_END
-            ;INVOKE AddFriendCallback
+            INVOKE AddFriendCallback
         .ELSEIF eax > SERVER_NOTIFY_CODE_START && eax < SERVER_NOTIFY_CODE_END
-            ;INVOKE NotificationListener
+            INVOKE NotificationListener
         .ENDIF
     .ENDW
     ret
