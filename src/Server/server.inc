@@ -18,28 +18,33 @@ INCLUDE Util/debug.inc
 ServerUp PROTO,
     port: DWORD
 ;------------------------------------
-; HandleRequest:
+; HandleRequestEntry:
 ; Args:
 ;       sockfd
 ; Rets:
 ;       eax -> {  COMMON_OK, COMMON_FAILED  }
 ;------------------------------------
-HandleRequest PROTO,
+HandleRequestEntry PROTO,
     sockfd: DWORD
 ;------------------------------------
-; HandleLogin:
+; HandleLoginRequest:
 ; Args:
 ;       sockfd
 ; Rets:
 ;       eax -> {  COMMON_OK, COMMON_FAILED  }
 ;------------------------------------
-HandleLogin PROTO,
+HandleLoginRequest PROTO,
+    sockfd: DWORD
+HandleRegisterRequest PROTO,
     sockfd: DWORD
 IsUserExist PROTO,
     user: PTR BYTE
 IsPswdCorrect PROTO,
+    user: PTR BYTE,
     pswd: PTR BYTE
-
+StoreNewUser PROTO,
+    user: PTR BYTE,
+    pswd: PTR BYTE
 
 
 

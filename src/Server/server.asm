@@ -4,17 +4,11 @@
 INCLUDE ./server.inc
 
 
-;------------- Code ----------------;
-
 .data
 cmdBuffer         BYTE 4 DUP(?)
 lengthOfCmdBuffer DWORD SIZEOF cmdBuffer
 .const
 listenOkMsg       BYTE "[Server online]", 0dh, 0ah, 0
-helloMsg          BYTE "[Server said] Hey, I heard your greeting, nice to meet u!", 0dh, 0ah, 0
-MSG_L BYTE "Got Login!", 0dh, 0ah, 0
-MSG_R BYTE "Got Register!", 0dh, 0ah, 0
-MSG_O BYTE "Got Other!", 0dh, 0ah, 0
 
 .code
 Main PROC
@@ -34,7 +28,7 @@ Main PROC
     @EXIT_FAILED_IF_INVALID_SOCKET
     mov clientSockfd, eax
 
-    INVOKE HandleRequest, clientSockfd
+    INVOKE HandleRequestEntry, clientSockfd
 
     INVOKE closesocket, clientSockfd
     INVOKE closesocket, serverSockfd
@@ -67,10 +61,10 @@ ServerUp PROC, port: DWORD
 ServerUp ENDP
 
 
-HandleRequest PROC, sockfd: DWORD
-    LOCAL  codebuf: DWORD
-    LOCAL  sockfdSet:    fd_set
-    LOCAL  timeout:      timeval
+HandleRequestEntry PROC, sockfd: DWORD
+    LOCAL  codebuf:   DWORD
+    LOCAL  sockfdSet: fd_set
+    LOCAL  timeout:   timeval
 
     .WHILE TRUE
         INVOKE crt_memcpy, ADDR sockfdSet.fd_array, ADDR sockfd, TYPE DWORD
@@ -88,9 +82,9 @@ HandleRequest PROC, sockfd: DWORD
 
         mov eax, codebuf
         .IF eax == REQ_LOGIN
-            INVOKE HandleLogin, sockfd
+            INVOKE HandleLoginRequest, sockfd
         .ELSEIF eax == REQ_REGISTER
-            ;INVOKE HandleRegister
+            INVOKE HandleRegisterRequest, sockfd
         .ELSE
             .BREAK
         .ENDIF
@@ -100,10 +94,10 @@ HandleRequest PROC, sockfd: DWORD
     INVOKE closesocket, sockfd
     ret
 
-HandleRequest ENDP
+HandleRequestEntry ENDP
 
 
-HandleLogin PROC, sockfd: DWORD
+HandleLoginRequest PROC, sockfd: DWORD
     LOCAL userbuf[1024]: BYTE
     LOCAL pswdbuf[1024]: BYTE
 
@@ -117,7 +111,7 @@ HandleLogin PROC, sockfd: DWORD
         INVOKE Util_SendCode, sockfd, LOGIN_USER_UNKNOWN
         ret
     .ENDIF
-    INVOKE IsPswdCorrect, ADDR pswdbuf
+    INVOKE IsPswdCorrect, ADDR userbuf, ADDR pswdbuf
     .IF eax != COMMON_OK
         INVOKE Util_SendCode, sockfd, LOGIN_PSWD_WRONG
         ret
@@ -125,7 +119,27 @@ HandleLogin PROC, sockfd: DWORD
     INVOKE Util_SendCode, sockfd, LOGIN_OK
     ret
 
-HandleLogin ENDP
+HandleLoginRequest ENDP
+
+
+HandleRegisterRequest PROC, sockfd: DWORD
+    LOCAL userbuf[1024]: BYTE
+    LOCAL pswdbuf[1024]: BYTE
+
+    INVOKE crt_memset, ADDR userbuf, 0, SIZEOF userbuf
+    INVOKE crt_memset, ADDR pswdbuf, 0, SIZEOF pswdbuf
+    INVOKE recv, sockfd, ADDR userbuf, SIZEOF userbuf, 0
+    INVOKE recv, sockfd, ADDR pswdbuf, SIZEOF pswdbuf, 0
+    INVOKE IsUserExist, ADDR userbuf
+    .IF eax != COMMON_OK
+        INVOKE Util_SendCode, sockfd, LOGIN_USER_UNKNOWN
+        ret
+    .ENDIF
+    INVOKE StoreNewUser, ADDR userbuf, ADDR pswdbuf
+    INVOKE Util_SendCode, sockfd, REGISTER_OK
+    ret
+
+HandleRegisterRequest ENDP
 
 
 END Main
