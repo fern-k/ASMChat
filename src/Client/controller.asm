@@ -1,6 +1,10 @@
 INCLUDE ./client.inc
 
-DealwithLoginResponse PROTO
+DealwithLoginResponse PROTO, code: DWORD
+DealwithRegisterResponse PROTO, code: DWORD
+DealwithSendTextResponse PROTO, code: DWORD
+DealwithAddFriendResponse PROTO, code: DWORD
+DealwithNotification PROTO, code: DWORD
 
 .code
 
@@ -28,7 +32,7 @@ DispatchConnect ENDP
 
 
 DispatchDisconnect PROC
-    LOCAL sockfd:  DWORD
+    LOCAL sockfd: DWORD
 
     INVOKE GetSockfd, ADDR sockfd
     INVOKE closesocket, sockfd
@@ -39,15 +43,42 @@ DispatchDisconnect ENDP
 
 
 DispatchLogin PROC, user: PTR BYTE, pswd: PTR BYTE
-    LOCAL sockfd:  DWORD
+    LOCAL sockfd: DWORD
 
     INVOKE GetSockfd, ADDR sockfd
     INVOKE Util_SendCode, sockfd, REQ_LOGIN
     INVOKE Util_SendStream, sockfd, user
     INVOKE Util_SendStream, sockfd, pswd
-    ret
+    @RET_FAILED_IF_SOCKET_ERROR
+    @RET_OK
 
 DispatchLogin ENDP
+
+
+DispatchRegister PROC, user: PTR BYTE, pswd: PTR BYTE
+    LOCAL sockfd: DWORD
+
+    INVOKE GetSockfd, ADDR sockfd
+    INVOKE Util_SendCode, sockfd, REQ_REGISTER
+    INVOKE Util_SendStream, sockfd, user
+    INVOKE Util_SendStream, sockfd, pswd
+    @RET_FAILED_IF_SOCKET_ERROR
+    @RET_OK
+
+DispatchRegister ENDP
+
+
+DispatchSendText PROC, targetUser: PTR BYTE, message: PTR BYTE
+    LOCAL sockfd: DWORD
+
+    INVOKE GetSockfd, ADDR sockfd
+    INVOKE Util_SendCode, sockfd, REQ_MESSAGE
+    INVOKE Util_SendStream, sockfd, targetUser
+    INVOKE Util_SendStream, sockfd, message
+    @RET_FAILED_IF_SOCKET_ERROR
+    @RET_OK
+
+DispatchSendText ENDP
 
 
 DealwithServerMessage PROC
@@ -60,15 +91,15 @@ DealwithServerMessage PROC
         @BREAK_IF_NOT_OK
         mov eax, codebuf
         .IF eax > LOGIN_CODE_START && eax < LOGIN_CODE_END
-            INVOKE DealwithLoginResponse
+            INVOKE DealwithLoginResponse, codebuf
         .ELSEIF eax > REGISTER_CODE_START && eax < REGISTER_CODE_END
-            INVOKE RegisterCallback
+            INVOKE DealwithRegisterResponse, codebuf
         .ELSEIF eax > SENDTEXT_CODE_START && eax < SENDTEXT_CODE_END
-            INVOKE SendTextCallback
+            INVOKE DealwithSendTextResponse, codebuf
         .ELSEIF eax > ADDFRIEND_CODE_START && eax < ADDFRIEND_CODE_END
-            INVOKE AddFriendCallback
+            INVOKE DealwithAddFriendResponse, codebuf
         .ELSEIF eax > SERVER_NOTIFY_CODE_START && eax < SERVER_NOTIFY_CODE_END
-            INVOKE NotificationListener
+            INVOKE DealwithNotification, codebuf
         .ENDIF
     .ENDW
     ret
@@ -79,10 +110,16 @@ DealwithServerMessage ENDP
 .data
 __DealwithLoginResponse__BUFFERSIZE DWORD 10 * 1024 * 1024
 .code
-DealwithLoginResponse PROC
-    LOCAL sockfd: DWORD
+DealwithLoginResponse PROC, code: DWORD
+    LOCAL sockfd:      DWORD
     LOCAL flistBuffer: PTR BYTE
-    LOCAL flistBufLen:    DWORD
+    LOCAL flistBufLen: DWORD
+
+    mov eax, code
+    .IF eax == LOGIN_USER_UNKNOWN || eax == LOGIN_PSWD_WRONG
+        INVOKE LoginCallback, code
+        @RET_FAILED
+    .ENDIF
 
     INVOKE GetSockfd, ADDR sockfd
     INVOKE crt_malloc, __DealwithLoginResponse__BUFFERSIZE
@@ -95,6 +132,31 @@ DealwithLoginResponse PROC
     @RET_OK
 
 DealwithLoginResponse ENDP
+
+
+DealwithRegisterResponse PROC, code: DWORD
+    INVOKE RegisterCallback, code
+    @RET_OK
+DealwithRegisterResponse ENDP
+
+
+DealwithSendTextResponse PROC, code: DWORD
+    INVOKE SendTextCallback, code
+    @RET_OK
+DealwithSendTextResponse ENDP
+
+
+DealwithAddFriendResponse PROC, code: DWORD
+    INVOKE AddFriendCallback, code
+    @RET_OK
+DealwithAddFriendResponse ENDP
+
+
+DealwithNotification PROC, code: DWORD
+    INVOKE NotificationListener, code
+    @RET_OK
+DealwithNotification ENDP
+
 
 
 

@@ -10,27 +10,32 @@ ViewEntry PROC
 ViewEntry ENDP
 
 
-LoginCallback PROC
+LoginCallback PROC, code: DWORD
+    mov eax, code
     ret
 LoginCallback ENDP
 
 
-RegisterCallback PROC
+RegisterCallback PROC, code: DWORD
+    mov eax, code
     ret
 RegisterCallback ENDP
 
 
-SendTextCallback PROC
+SendTextCallback PROC, code: DWORD
+    mov eax, code
     ret
 SendTextCallback ENDP
 
 
-AddFriendCallback PROC
+AddFriendCallback PROC, code: DWORD
+    mov eax, code
     ret
 AddFriendCallback ENDP
 
 
-NotificationListener PROC
+NotificationListener PROC, code: DWORD
+    mov eax, code
     ret
 NotificationListener ENDP
 

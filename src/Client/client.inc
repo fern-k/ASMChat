@@ -5,9 +5,17 @@ CLIENT_HEADER PROTO
 INCLUDE Util/util.inc
 INCLUDE Util/debug.inc
 
+ChatLinklistNode STRUCT
+    next DWORD 0
+    data DWORD 0
+    dlen DWORD 0
+    time SYSTEMTIME <>
+ChatLinklistNode ENDS
+
 FriendModel STRUCT
     username BYTE 100 DUP(0)
     status DWORD 0
+    chatListHeader ChatLinklistNode <>
 FriendModel ENDS
 
 ClientModel STRUCT
@@ -34,19 +42,19 @@ ParseFriendList        PROTO, flistBuffer: PTR BYTE, flistBufLen: DWORD
 
 ;********* Client View Component *********;
 ViewEntry              PROTO
-LoginCallback          PROTO
-RegisterCallback       PROTO
-SendTextCallback       PROTO
-AddFriendCallback      PROTO
-NotificationListener   PROTO
+LoginCallback          PROTO, code: DWORD
+RegisterCallback       PROTO, code: DWORD
+SendTextCallback       PROTO, code: DWORD
+AddFriendCallback      PROTO, code: DWORD
+NotificationListener   PROTO, code: DWORD
 
 ;********* Client Controller Component *********;
 DealwithServerMessage  PROTO
 DispatchConnect        PROTO, ip: PTR BYTE, port: DWORD
 DispatchDisconnect     PROTO
 DispatchLogin          PROTO, user: PTR BYTE, pswd: PTR BYTE
-DispatchRegister       PROTO
-DispatchSendText       PROTO
+DispatchRegister       PROTO, user: PTR BYTE, pswd: PTR BYTE
+DispatchSendText       PROTO, targetUser: PTR BYTE, message: PTR BYTE
 
 
 
