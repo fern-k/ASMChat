@@ -74,6 +74,26 @@ Util_RecvStream PROTO,
     streambuf: PTR BYTE,
     streambuflen: DWORD
 ;------------------------------------
+; Util_Malloc: Malloc a memory filled with 0.
+; Args:
+;       bufpp
+;       requestlen
+; Rets:
+;       eax -> { COMMON_OK }
+;------------------------------------
+Util_Malloc PROTO,
+    bufpp: DWORD,
+    requestlen: DWORD
+;------------------------------------
+; Util_Free: Free a memory.
+; Args:
+;       bufp
+; Rets:
+;       eax -> { COMMON_OK }
+;------------------------------------
+Util_Free PROTO,
+    bufp: PTR BYTE
+;------------------------------------
 ; Util_Div: Divide. To replace harmful x86 div instruction.
 ; Args:
 ;       dividend

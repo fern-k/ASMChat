@@ -63,6 +63,26 @@ Util_RecvStream PROC, sockfd: DWORD, streambuf: PTR BYTE, streambuflen: DWORD
 Util_RecvStream ENDP
 
 
+Util_Malloc PROC, bufpp: DWORD, requestlen: DWORD
+    LOCAL  bufptr: DWORD
+
+    INVOKE crt_malloc, requestlen
+    mov    bufptr, eax
+    INVOKE crt_memset, bufptr, 0, requestlen
+    INVOKE crt_memcpy, bufpp, ADDR bufptr, SIZEOF DWORD
+    @RET_OK
+
+Util_Malloc ENDP
+
+
+Util_Free PROC, bufp: PTR BYTE
+
+    INVOKE crt_free, bufp
+    @RET_OK
+
+Util_Free ENDP
+
+
 Util_Div PROC USES ecx edx, dividend: DWORD, divisor: DWORD
 
     mov eax, dividend

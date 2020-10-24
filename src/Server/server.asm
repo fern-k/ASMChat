@@ -152,18 +152,17 @@ HandleMessageRequest PROC, sockfd: DWORD
     LOCAL messagebuf: PTR BYTE
     LOCAL messagelen: DWORD
 
-    INVOKE crt_malloc, __HandleMessageRequest__BUFFERSIZE
-    mov    targetbuf, eax
-    INVOKE crt_malloc, __HandleMessageRequest__BUFFERSIZE
-    mov    messagebuf, eax
-    INVOKE crt_memset, targetbuf, 0, __HandleMessageRequest__BUFFERSIZE
-    INVOKE crt_memset, messagebuf, 0, __HandleMessageRequest__BUFFERSIZE
+    INVOKE Util_Malloc, ADDR targetbuf, __HandleMessageRequest__BUFFERSIZE
+    INVOKE Util_Malloc, ADDR messagebuf, __HandleMessageRequest__BUFFERSIZE
 
     INVOKE Util_RecvStream, sockfd, targetbuf, __HandleMessageRequest__BUFFERSIZE
     mov    targetlen, ebx
     INVOKE Util_RecvStream, sockfd, messagebuf, __HandleMessageRequest__BUFFERSIZE
     mov    messagelen, ebx
     ; TODO: Handle send message
+
+    INVOKE Util_Free, targetbuf
+    INVOKE Util_Free, messagebuf
     ret
 
 HandleMessageRequest ENDP

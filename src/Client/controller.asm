@@ -121,16 +121,15 @@ DealwithLoginResponse PROC, code: DWORD
         @RET_FAILED
     .ENDIF
 
-    INVOKE crt_malloc, __DealwithLoginResponse__BUFFERSIZE
-    mov    friendlistbuf, eax
-    INVOKE crt_memset, friendlistbuf, 0, __DealwithLoginResponse__BUFFERSIZE
+    INVOKE Util_Malloc, ADDR friendlistbuf, __DealwithLoginResponse__BUFFERSIZE
 
     INVOKE GetSockfd, ADDR sockfd
     INVOKE Util_RecvStream, sockfd, friendlistbuf, __DealwithLoginResponse__BUFFERSIZE
     mov    friendlistlen, ebx
     INVOKE ParseFriendList, friendlistbuf, friendlistlen
-    INVOKE crt_free, friendlistbuf
     INVOKE LoginCallback, code
+
+    INVOKE Util_Free, friendlistbuf
     @RET_OK
 
 DealwithLoginResponse ENDP
