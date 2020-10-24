@@ -128,7 +128,6 @@ ENDM
 ;;; Ret if socket_error or if not ok
 @RET_FAILED_IF_SOCKET_ERROR MACRO
     .IF eax == SOCKET_ERROR
-        INVOKE crt_printf, ADDR socketError
         mov eax, COMMON_FAILED
         ret
     .ENDIF
@@ -143,7 +142,6 @@ ENDM
 ;;; Break if socket error or if not ok 
 @BREAK_IF_SOCKET_ERROR MACRO
     .IF eax == SOCKET_ERROR
-        INVOKE crt_printf, ADDR socketError
         .BREAK
     .ENDIF
 ENDM
@@ -162,7 +160,6 @@ ENDM
 ENDM
 @EXIT_FAILED_IF_INVALID_SOCKET MACRO
     .IF eax == INVALID_SOCKET
-        INVOKE crt_printf, ADDR socketError
         INVOKE Util_Exit, 1
     .ENDIF
 ENDM
@@ -172,7 +169,6 @@ ENDM
 .const
 defaultServerIP   BYTE  "127.0.0.1", 0
 defaultServerPort DWORD 9798
-socketError       BYTE "Socket Error!", 0
 user0             BYTE "aliceu", 0
 pswd0             BYTE "alicepswd111", 0
 user1             BYTE "bobu", 0

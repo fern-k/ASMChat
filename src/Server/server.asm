@@ -100,21 +100,23 @@ HandleLoginRequest PROC, sockfd: DWORD
     LOCAL userbuf[1024]: BYTE
     LOCAL pswdbuf[1024]: BYTE
 
-    @DEBUG A2
-    INVOKE crt_memset, ADDR userbuf, 0, SIZEOF userbuf
-    INVOKE crt_memset, ADDR pswdbuf, 0, SIZEOF pswdbuf
-    INVOKE recv, sockfd, ADDR userbuf, SIZEOF userbuf, 0
-    INVOKE recv, sockfd, ADDR pswdbuf, SIZEOF pswdbuf, 0
+    INVOKE crt_memset, ADDR userbuf, 0, 1024
+    INVOKE crt_memset, ADDR pswdbuf, 0, 1024
+    INVOKE Util_RecvStream, sockfd, ADDR userbuf, 1024
+    INVOKE Util_RecvStream, sockfd, ADDR pswdbuf, 1024
     INVOKE IsUserExist, ADDR userbuf
     .IF eax != COMMON_OK
+        @DEBUG B1
         INVOKE Util_SendCode, sockfd, LOGIN_USER_UNKNOWN
         ret
     .ENDIF
     INVOKE IsPswdCorrect, ADDR userbuf, ADDR pswdbuf
     .IF eax != COMMON_OK
+        @DEBUG B2
         INVOKE Util_SendCode, sockfd, LOGIN_PSWD_WRONG
         ret
     .ENDIF
+    @DEBUG B3
     INVOKE Util_SendCode, sockfd, LOGIN_OK
     ret
 
