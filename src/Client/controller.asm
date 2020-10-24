@@ -22,7 +22,7 @@ DispatchConnect PROC, ip: PTR BYTE, port: DWORD
     INVOKE inet_addr, ip
     mov    sockAddr.sin_addr, eax
     mov    sockAddr.sin_family, AF_INET
-	INVOKE connect, sockfd, ADDR sockAddr, SIZEOF sockAddr
+    INVOKE connect, sockfd, ADDR sockAddr, SIZEOF sockAddr
     @RET_FAILED_IF_SOCKET_ERROR
 
     mov ebx, sockfd
@@ -111,24 +111,26 @@ DealwithServerMessage ENDP
 __DealwithLoginResponse__BUFFERSIZE DWORD 10 * 1024 * 1024
 .code
 DealwithLoginResponse PROC, code: DWORD
-    LOCAL sockfd:      DWORD
-    LOCAL flistBuffer: PTR BYTE
-    LOCAL flistBufLen: DWORD
+    LOCAL sockfd:        DWORD
+    LOCAL friendlistbuf: PTR BYTE
+    LOCAL friendlistlen: DWORD
 
     mov eax, code
-    .IF eax == LOGIN_USER_UNKNOWN || eax == LOGIN_PSWD_WRONG
+    .IF eax != LOGIN_OK
         INVOKE LoginCallback, code
         @RET_FAILED
     .ENDIF
 
-    INVOKE GetSockfd, ADDR sockfd
     INVOKE crt_malloc, __DealwithLoginResponse__BUFFERSIZE
-    mov    flistBuffer, eax
-    INVOKE crt_memset, flistBuffer, 0, __DealwithLoginResponse__BUFFERSIZE
-    INVOKE Util_RecvStream, sockfd, flistBuffer, __DealwithLoginResponse__BUFFERSIZE
-    mov    flistBufLen, ebx
-    INVOKE ParseFriendList, flistBuffer, flistBufLen
-    INVOKE crt_free, flistBuffer
+    mov    friendlistbuf, eax
+    INVOKE crt_memset, friendlistbuf, 0, __DealwithLoginResponse__BUFFERSIZE
+
+    INVOKE GetSockfd, ADDR sockfd
+    INVOKE Util_RecvStream, sockfd, friendlistbuf, __DealwithLoginResponse__BUFFERSIZE
+    mov    friendlistlen, ebx
+    INVOKE ParseFriendList, friendlistbuf, friendlistlen
+    INVOKE crt_free, friendlistbuf
+    INVOKE LoginCallback, code
     @RET_OK
 
 DealwithLoginResponse ENDP

@@ -156,6 +156,9 @@ HandleMessageRequest PROC, sockfd: DWORD
     mov    targetbuf, eax
     INVOKE crt_malloc, __HandleMessageRequest__BUFFERSIZE
     mov    messagebuf, eax
+    INVOKE crt_memset, targetbuf, 0, __HandleMessageRequest__BUFFERSIZE
+    INVOKE crt_memset, messagebuf, 0, __HandleMessageRequest__BUFFERSIZE
+
     INVOKE Util_RecvStream, sockfd, targetbuf, __HandleMessageRequest__BUFFERSIZE
     mov    targetlen, ebx
     INVOKE Util_RecvStream, sockfd, messagebuf, __HandleMessageRequest__BUFFERSIZE

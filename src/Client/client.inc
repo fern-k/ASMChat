@@ -49,12 +49,12 @@ AddFriendCallback      PROTO, code: DWORD
 NotificationListener   PROTO, code: DWORD
 
 ;********* Client Controller Component *********;
-DealwithServerMessage  PROTO
 DispatchConnect        PROTO, ip: PTR BYTE, port: DWORD
 DispatchDisconnect     PROTO
 DispatchLogin          PROTO, user: PTR BYTE, pswd: PTR BYTE
 DispatchRegister       PROTO, user: PTR BYTE, pswd: PTR BYTE
 DispatchSendText       PROTO, targetUser: PTR BYTE, message: PTR BYTE
+DealwithServerMessage  PROTO
 
 
 
