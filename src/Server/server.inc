@@ -37,6 +37,8 @@ HandleLoginRequest PROTO,
     sockfd: DWORD
 HandleRegisterRequest PROTO,
     sockfd: DWORD
+HandleMessageRequest PROTO,
+    sockfd: DWORD
 IsUserExist PROTO,
     user: PTR BYTE
 IsPswdCorrect PROTO,

@@ -85,10 +85,11 @@ HandleRequestEntry PROC, sockfd: DWORD
             INVOKE HandleLoginRequest, sockfd
         .ELSEIF eax == REQ_REGISTER
             INVOKE HandleRegisterRequest, sockfd
+        .ELSEIF eax == REQ_MESSAGE
+            INVOKE HandleMessageRequest, sockfd
         .ELSE
             .BREAK
         .ENDIF
-
     .ENDW
 
     INVOKE closesocket, sockfd
@@ -140,6 +141,29 @@ HandleRegisterRequest PROC, sockfd: DWORD
     ret
 
 HandleRegisterRequest ENDP
+
+
+.data
+__HandleMessageRequest__BUFFERSIZE DWORD 20 * 1024 * 1024
+.code
+HandleMessageRequest PROC, sockfd: DWORD
+    LOCAL targetbuf:  PTR BYTE
+    LOCAL targetlen:  DWORD
+    LOCAL messagebuf: PTR BYTE
+    LOCAL messagelen: DWORD
+
+    INVOKE crt_malloc, __HandleMessageRequest__BUFFERSIZE
+    mov    targetbuf, eax
+    INVOKE crt_malloc, __HandleMessageRequest__BUFFERSIZE
+    mov    messagebuf, eax
+    INVOKE Util_RecvStream, sockfd, targetbuf, __HandleMessageRequest__BUFFERSIZE
+    mov    targetlen, ebx
+    INVOKE Util_RecvStream, sockfd, messagebuf, __HandleMessageRequest__BUFFERSIZE
+    mov    messagelen, ebx
+    ; TODO: Handle send message
+    ret
+
+HandleMessageRequest ENDP
 
 
 END Main
