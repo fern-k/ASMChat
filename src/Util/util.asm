@@ -19,13 +19,7 @@ Util_SendCode PROC, sockfd: DWORD, code: DWORD
     LOCAL codebuf: DWORD
     LOCAL totalsent: DWORD
 
-    INVOKE crt_memset, ADDR codebuf, 0, SIZEOF codebuf
-    mov    eax, code
-    mov    codebuf, eax
-    INVOKE send, sockfd, ADDR codebuf, TYPE DWORD, 0
-    mov    totalsent, 0
-    mov    totalsent, eax
-    mov    eax, totalsent
+    INVOKE send, sockfd, ADDR code, TYPE DWORD, 0
     @RET_FAILED_IF_SOCKET_ERROR
     @RET_OK
 
@@ -37,6 +31,8 @@ Util_SendStream PROC, sockfd: DWORD, stream: PTR BYTE
 
     INVOKE crt_strlen, stream
     mov    streamLength, eax
+    INVOKE send, sockfd, ADDR streamLength, TYPE DWORD, 0
+    @RET_FAILED_IF_SOCKET_ERROR
     INVOKE send, sockfd, stream, streamLength, 0
     @RET_FAILED_IF_SOCKET_ERROR
     @RET_OK
@@ -46,7 +42,7 @@ Util_SendStream ENDP
 
 Util_RecvCode PROC, sockfd: DWORD, codebuf: PTR DWORD
 
-    INVOKE recv, sockfd, codebuf, CODE_LEN, 0
+    INVOKE recv, sockfd, codebuf, TYPE DWORD, 0
     @RET_FAILED_IF_SOCKET_ERROR
     @RET_OK
 
@@ -54,10 +50,13 @@ Util_RecvCode ENDP
 
 
 Util_RecvStream PROC, sockfd: DWORD, streambuf: PTR BYTE, streambuflen: DWORD
+    LOCAL reallen: DWORD
 
-    INVOKE recv, sockfd, streambuf, streambuflen, 0
+    INVOKE recv, sockfd, ADDR reallen, TYPE DWORD, 0
     @RET_FAILED_IF_SOCKET_ERROR
-    mov ebx, eax
+    INVOKE recv, sockfd, streambuf, reallen, 0
+    @RET_FAILED_IF_SOCKET_ERROR
+    mov    ebx, reallen
     @RET_OK
 
 Util_RecvStream ENDP
