@@ -7,6 +7,15 @@ INCLUDE Util/util.inc
 INCLUDE Util/debug.inc
 
 
+ClientData STRUCT
+    sockfd DWORD 0
+    username BYTE 100 DUP(0)
+ClientData ENDS
+
+ServerModel STRUCT
+    clients ClientData 100 DUP(<>)
+ServerModel ENDS
+
 ;------------------------------------
 ; ServerUp:
 ; Args:

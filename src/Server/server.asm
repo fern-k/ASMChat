@@ -3,12 +3,10 @@
 
 INCLUDE ./server.inc
 
-
 .data
-cmdBuffer         BYTE 4 DUP(?)
-lengthOfCmdBuffer DWORD SIZEOF cmdBuffer
+serverModelInstance ServerModel <>
 .const
-listenOkMsg       BYTE "[Server online]", 0dh, 0ah, 0
+listenokMsg       BYTE "[Server online]", 0dh, 0ah, 0
 
 .code
 Main PROC
@@ -18,7 +16,7 @@ Main PROC
     INVOKE ServerUp, defaultServerPort
     @EXIT_FAILED_IF_NOT_OK
     mov    serverSockfd, ebx
-    INVOKE crt_printf, ADDR listenOkMsg
+    INVOKE crt_printf, ADDR listenokMsg
 
     ; TODO: Create HandleThread to handle recving msg. All server actions
     ; are only fired by recving cmd,
