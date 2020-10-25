@@ -27,13 +27,21 @@ ServerModel ENDS
 ServerUp PROTO,
     port: DWORD
 ;------------------------------------
-; HandleRequestEntry:
+; ServerListenWorker:
+; Args:
+;       sockfd
+; Rets: None
+;------------------------------------
+ServerListenWorker PROTO,
+    sockfd: DWORD
+;------------------------------------
+; ClientCommunicateWorker:
 ; Args:
 ;       sockfd
 ; Rets:
 ;       eax -> {  COMMON_OK, COMMON_FAILED  }
 ;------------------------------------
-HandleRequestEntry PROTO,
+ClientCommunicateWorker PROTO,
     sockfd: DWORD
 ;------------------------------------
 ; HandleLoginRequest:

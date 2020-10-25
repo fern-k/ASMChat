@@ -21,6 +21,9 @@
     <MASM Include="database.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="worker.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="server.inc">
