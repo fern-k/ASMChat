@@ -24,8 +24,10 @@ Main PROC
     .ENDIF
 
     ;INVOKE DispatchLogin, ADDR user404, ADDR pswd404
+    ;INVOKE DispatchLogin, ADDR user0, ADDR pswd0
+    ;INVOKE DispatchLogin, ADDR user0, ADDR pswd1
     ;INVOKE DispatchRegister, ADDR user0, ADDR pswd0
-    INVOKE DispatchLogin, ADDR user0, ADDR pswd0
+    INVOKE DispatchRegister, ADDR user404, ADDR pswd404
     ;INVOKE DispatchDisconnect
 
     INVOKE Util_Exit, 0

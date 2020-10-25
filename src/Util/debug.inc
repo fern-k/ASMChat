@@ -5,14 +5,19 @@ DEBUG_HEADER PROTO
 
 ;--------------- Debug ---------------;
 ; Example: @DEBUG A0
-; (See marker in bellow section)
+; (See markers in bellow section)
 @DEBUG MACRO marker
+    pushad
     INVOKE crt_printf, ADDR marker
+    popad
 ENDM
+
 ; Example: @DBPRINT FMT_DWORD_ENDL, a_dword_value
-; (See formatter in bellow section)
+; (See formatters in bellow section)
 @DBPRINT MACRO formatter, d
+    pushad
     INVOKE crt_printf, ADDR formatter, d
+    popad
 ENDM
 
 

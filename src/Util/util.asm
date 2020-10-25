@@ -16,8 +16,6 @@ Util_CreateSocket ENDP
 
 
 Util_SendCode PROC, sockfd: DWORD, code: DWORD
-    LOCAL codebuf: DWORD
-    LOCAL totalsent: DWORD
 
     INVOKE send, sockfd, ADDR code, TYPE DWORD, 0
     @RET_FAILED_IF_SOCKET_ERROR
@@ -49,7 +47,7 @@ Util_RecvCode PROC, sockfd: DWORD, codebuf: PTR DWORD
 Util_RecvCode ENDP
 
 
-Util_RecvStream PROC, sockfd: DWORD, streambuf: PTR BYTE, streambuflen: DWORD
+Util_RecvStream PROC, sockfd: DWORD, streambuf: PTR BYTE
     LOCAL reallen: DWORD
 
     INVOKE recv, sockfd, ADDR reallen, TYPE DWORD, 0

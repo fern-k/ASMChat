@@ -124,7 +124,7 @@ DealwithLoginResponse PROC, code: DWORD
     INVOKE Util_Malloc, ADDR friendlistbuf, __DealwithLoginResponse__BUFFERSIZE
 
     INVOKE GetSockfd, ADDR sockfd
-    INVOKE Util_RecvStream, sockfd, friendlistbuf, __DealwithLoginResponse__BUFFERSIZE
+    INVOKE Util_RecvStream, sockfd, friendlistbuf
     mov    friendlistlen, ebx
     INVOKE ParseFriendList, friendlistbuf, friendlistlen
     INVOKE LoginCallback, code

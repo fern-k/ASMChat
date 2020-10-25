@@ -64,15 +64,13 @@ Util_RecvCode PROTO,
 ; Args:
 ;       sockfd -> target socket to recv stream
 ;       streambuf -> the stream buffer
-;       streambuflen -> the stream buffer length
 ; Rets:
 ;       eax -> {  COMMON_OK, COMMON_FAILED  }
 ;       ebx -> stream length
 ;------------------------------------
 Util_RecvStream PROTO,
     sockfd: DWORD,
-    streambuf: PTR BYTE,
-    streambuflen: DWORD
+    streambuf: PTR BYTE
 ;------------------------------------
 ; Util_Malloc: Malloc a memory filled with 0.
 ; Args:
