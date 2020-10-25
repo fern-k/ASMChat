@@ -104,12 +104,12 @@ HandleRegisterRequest PROC, sockfd: DWORD
 HandleRegisterRequest ENDP
 
 
-.data
-__HandleMessageRequest__BUFFERSIZE DWORD 20 * 1024 * 1024
-.code
 HandleMessageRequest PROC, sockfd: DWORD
     LOCAL targetbuf:  PTR BYTE
     LOCAL messagebuf: PTR BYTE
+    .data
+    __HandleMessageRequest__BUFFERSIZE DWORD 20 * 1024 * 1024
+    .code
 
     INVOKE Util_Malloc, ADDR targetbuf, __HandleMessageRequest__BUFFERSIZE
     INVOKE Util_Malloc, ADDR messagebuf, __HandleMessageRequest__BUFFERSIZE

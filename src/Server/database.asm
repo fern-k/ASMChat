@@ -5,7 +5,6 @@ INCLUDE ./server.inc
 
 
 IsUserExist PROC, user: PTR BYTE
-
     INVOKE crt_strcmp, user, ADDR user0
     .IF eax == 0
         @RET_OK
@@ -20,7 +19,6 @@ IsUserExist ENDP
 
 
 IsPswdCorrect PROC, user: PTR BYTE, pswd: PTR BYTE
-
     INVOKE crt_strcmp, user, ADDR user0
     .IF eax == 0
         INVOKE crt_strcmp, pswd, ADDR pswd0

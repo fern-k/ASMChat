@@ -1,19 +1,19 @@
 ;*********** Server Entry **********;
 INCLUDE ./server.inc
 
-.const
-listenokMsg       BYTE "[Server online]", 0dh, 0ah, 0
-
 .code
 Main PROC
-    LOCAL serverSockfd: DWORD
+    .data
+    __Main__listenokMsg  BYTE "[Server online]", 0dh, 0ah, 0
+    __Main__serverSockfd DWORD 0
+    .code
 
     INVOKE ServerUp, defaultServerPort
     @EXIT_FAILED_IF_NOT_OK
-    mov    serverSockfd, ebx
-    INVOKE crt_printf, ADDR listenokMsg
+    mov    __Main__serverSockfd, ebx
+    INVOKE crt_printf, ADDR __Main__listenokMsg
 
-    INVOKE ServerListenWorker, serverSockfd
+    INVOKE ServerListenWorker, __Main__serverSockfd
 
     INVOKE Util_Exit, 0
     ret

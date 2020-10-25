@@ -1,16 +1,16 @@
 ;*********** Client Entry **********;
 INCLUDE ./client.inc
 
-.const
-user404           BYTE "User404", 0
-pswd404           BYTE "Pswd404", 0
-connectokMsg      BYTE "[Client connect to server ok]", 0dh, 0ah, 0
 
 .code
 Main PROC
-    LOCAL sockfd: DWORD
-    LOCAL localTime: SYSTEMTIME
-    invoke GetLocalTime, ADDR localTime
+    ;LOCAL localTime: SYSTEMTIME
+    .data
+    sockfd       DWORD 0
+    connectokMsg BYTE "[Client connect to server ok]", 0dh, 0ah, 0
+    .code
+
+    ;INVOKE GetLocalTime, ADDR localTime
 
     INVOKE DispatchConnect, ADDR defaultServerIP, defaultServerPort
     @EXIT_FAILED_IF_NOT_OK

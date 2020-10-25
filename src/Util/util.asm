@@ -91,15 +91,15 @@ Util_Div PROC USES ecx edx, dividend: DWORD, divisor: DWORD
 Util_Div ENDP
 
 
-.data
-@_exit_exitMsg BYTE  0ah, 0dh, "Enter any character to exit...", 0ah, 0dh, 0
-@_exit_holdFmt BYTE  "%d", 0
-@_exit_holdVal DWORD ?
-.code
 Util_Exit PROC, exitcode: DWORD
+    .data
+    __exit__exitMsg BYTE  0ah, 0dh, "Enter any character to exit...", 0ah, 0dh, 0
+    __exit__holdFmt BYTE  "%d", 0
+    __exit__holdVal DWORD ?
+    .code
 
-    INVOKE crt_printf, ADDR @_exit_exitMsg
-	INVOKE crt_scanf, ADDR @_exit_holdFmt, ADDR @_exit_holdVal
+    INVOKE crt_printf, ADDR __exit__exitMsg
+	INVOKE crt_scanf, ADDR __exit__holdFmt, ADDR __exit__holdVal
     INVOKE ExitProcess, exitcode
     ret
 

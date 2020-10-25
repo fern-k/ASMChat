@@ -165,12 +165,14 @@ ENDM
 
 ;-------------- Const ---------------;
 .const
-defaultServerIP   BYTE  "127.0.0.1", 0
 defaultServerPort DWORD 9798
-user0             BYTE "aliceu", 0
-pswd0             BYTE "alicepswd111", 0
-user1             BYTE "bobu", 0
-pswd1             BYTE "bobpswd", 0
+defaultServerIP   BYTE  "127.0.0.1", 0
+user0             BYTE "User0", 0
+pswd0             BYTE "Pswd0", 0
+user1             BYTE "User1", 0
+pswd1             BYTE "Pswd1", 0
+user404           BYTE "User404", 0
+pswd404           BYTE "Pswd404", 0
 
 ; Common code
 COMMON_CODE_START          DWORD 600h
