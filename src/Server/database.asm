@@ -1,6 +1,8 @@
 INCLUDE ./server.inc
 
+
 .code
+
 
 IsUserExist PROC, user: PTR BYTE
 
@@ -12,9 +14,10 @@ IsUserExist PROC, user: PTR BYTE
     .IF eax == 0
         @RET_OK
     .ENDIF
-    @RET_FAILED
 
+    @RET_FAILED
 IsUserExist ENDP
+
 
 IsPswdCorrect PROC, user: PTR BYTE, pswd: PTR BYTE
 
@@ -34,9 +37,10 @@ IsPswdCorrect PROC, user: PTR BYTE, pswd: PTR BYTE
         .ENDIF
         @RET_FAILED
     .ENDIF
-    @RET_FAILED
 
+    @RET_FAILED
 IsPswdCorrect ENDP
+
 
 StoreNewUser PROC, user: PTR BYTE, pswd: PTR BYTE
     mov eax, [user]

@@ -11,11 +11,13 @@ GetSockfd PROC, sockbuf: PTR DWORD
     @RET_OK
 GetSockfd ENDP
 
+
 SetSockfd PROC, newsock: DWORD
     mov eax, newsock
     mov clientModelInstance.sockfd, eax
     @RET_OK
 SetSockfd ENDP
+
 
 GetFriendList PROC, flistbuf: PTR DWORD
     LOCAL  frinedListAddr: DWORD
@@ -24,12 +26,14 @@ GetFriendList PROC, flistbuf: PTR DWORD
     @RET_OK
 GetFriendList ENDP
 
+
 AppendFriend PROC, newFriend: PTR FriendModel
     mov eax, clientModelInstance.friendNumb
     INVOKE crt_memcpy, clientModelInstance.friendList[eax], newFriend, SIZEOF FriendModel
     inc clientModelInstance.friendNumb
     @RET_OK
 AppendFriend ENDP
+
 
 ChangeFriendStatus PROC USES ebx ecx edx, friendName: PTR BYTE, newStatus: DWORD
     LOCAL currFriend: PTR FriendModel
@@ -49,8 +53,10 @@ ChangeFriendStatus PROC USES ebx ecx edx, friendName: PTR BYTE, newStatus: DWORD
         INVOKE crt_memcpy, (FriendModel PTR currFriend).status, ADDR newStatus, TYPE DWORD
         @RET_OK
     .ENDW
+
     @RET_FAILED
 ChangeFriendStatus ENDP
+
 
 ParseFriendList PROC USES ebx ecx edx, flistBuffer: PTR BYTE, flistBufLen: DWORD
     LOCAL flistLength:    DWORD
@@ -68,6 +74,7 @@ ParseFriendList PROC USES ebx ecx edx, flistBuffer: PTR BYTE, flistBufLen: DWORD
         INVOKE AppendFriend, currFriend
         inc ecx
     .ENDW
+
     @RET_OK
 ParseFriendList ENDP
 

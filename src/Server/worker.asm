@@ -1,9 +1,7 @@
 INCLUDE ./server.inc
 
-
 .data
 serverModelInstance ServerModel <>
-
 
 .code
 ServerListenWorker PROC, sockfd: DWORD
@@ -18,7 +16,6 @@ ServerListenWorker PROC, sockfd: DWORD
 
     INVOKE closesocket, sockfd
     ret
-
 ServerListenWorker ENDP
 
 
@@ -55,7 +52,6 @@ ClientCommunicateWorker PROC, sockfd: DWORD
 
     INVOKE closesocket, sockfd
     ret
-
 ClientCommunicateWorker ENDP
 
 
@@ -79,10 +75,10 @@ HandleLoginRequest PROC, sockfd: DWORD
         INVOKE Util_SendCode, sockfd, LOGIN_PSWD_WRONG
         ret
     .ENDIF
+
     @DEBUG B3
     INVOKE Util_SendCode, sockfd, LOGIN_OK
     ret
-
 HandleLoginRequest ENDP
 
 
@@ -100,11 +96,11 @@ HandleRegisterRequest PROC, sockfd: DWORD
         INVOKE Util_SendCode, sockfd, REGISTER_USER_EXIST
         ret
     .ENDIF
+
+    @DEBUG C2
     INVOKE StoreNewUser, ADDR userbuf, ADDR pswdbuf
     INVOKE Util_SendCode, sockfd, REGISTER_OK
-    @DEBUG C2
     ret
-
 HandleRegisterRequest ENDP
 
 
@@ -125,7 +121,6 @@ HandleMessageRequest PROC, sockfd: DWORD
     INVOKE Util_Free, targetbuf
     INVOKE Util_Free, messagebuf
     ret
-
 HandleMessageRequest ENDP
 
 

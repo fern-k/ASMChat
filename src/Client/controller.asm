@@ -27,7 +27,6 @@ DispatchConnect PROC, ip: PTR BYTE, port: DWORD
 
     mov ebx, sockfd
     @RET_OK
-
 DispatchConnect ENDP
 
 
@@ -37,8 +36,8 @@ DispatchDisconnect PROC
     INVOKE GetSockfd, ADDR sockfd
     INVOKE closesocket, sockfd
     @RET_FAILED_IF_SOCKET_ERROR
-    @RET_OK
 
+    @RET_OK
 DispatchDisconnect ENDP
 
 
@@ -50,8 +49,8 @@ DispatchLogin PROC, user: PTR BYTE, pswd: PTR BYTE
     INVOKE Util_SendStream, sockfd, user
     INVOKE Util_SendStream, sockfd, pswd
     @RET_FAILED_IF_SOCKET_ERROR
-    @RET_OK
 
+    @RET_OK
 DispatchLogin ENDP
 
 
@@ -63,8 +62,8 @@ DispatchRegister PROC, user: PTR BYTE, pswd: PTR BYTE
     INVOKE Util_SendStream, sockfd, user
     INVOKE Util_SendStream, sockfd, pswd
     @RET_FAILED_IF_SOCKET_ERROR
-    @RET_OK
 
+    @RET_OK
 DispatchRegister ENDP
 
 
@@ -76,8 +75,8 @@ DispatchSendText PROC, targetUser: PTR BYTE, message: PTR BYTE
     INVOKE Util_SendStream, sockfd, targetUser
     INVOKE Util_SendStream, sockfd, message
     @RET_FAILED_IF_SOCKET_ERROR
-    @RET_OK
 
+    @RET_OK
 DispatchSendText ENDP
 
 
@@ -102,8 +101,8 @@ DealwithServerMessage PROC
             INVOKE DealwithNotification, codebuf
         .ENDIF
     .ENDW
-    ret
 
+    ret
 DealwithServerMessage ENDP
 
 
@@ -131,7 +130,6 @@ DealwithLoginResponse PROC, code: DWORD
 
     INVOKE Util_Free, friendlistbuf
     @RET_OK
-
 DealwithLoginResponse ENDP
 
 
