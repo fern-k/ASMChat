@@ -106,13 +106,13 @@ DealwithServerMessage PROC
 DealwithServerMessage ENDP
 
 
-.data
-__DealwithLoginResponse__BUFFERSIZE DWORD 10 * 1024 * 1024
-.code
 DealwithLoginResponse PROC, code: DWORD
     LOCAL sockfd:        DWORD
     LOCAL friendlistbuf: PTR BYTE
     LOCAL friendlistlen: DWORD
+    .data
+    __DealwithLoginResponse__BUFFERSIZE DWORD 10 * 1024 * 1024
+    .code
 
     mov eax, code
     .IF eax != LOGIN_OK
