@@ -61,10 +61,9 @@ HandleLoginRequest PROC, sockfd: DWORD
     LOCAL userbuf[1024]: BYTE
     LOCAL pswdbuf[1024]: BYTE
 
-    INVOKE crt_memset, ADDR userbuf, 0, 1024
-    INVOKE crt_memset, ADDR pswdbuf, 0, 1024
-    INVOKE Util_RecvStream, sockfd, ADDR userbuf
-    INVOKE Util_RecvStream, sockfd, ADDR pswdbuf
+    INVOKE Util_RecvString, sockfd, ADDR userbuf
+    INVOKE Util_RecvString, sockfd, ADDR pswdbuf
+
     INVOKE IsUserExist, ADDR userbuf
     @DEBUG B0
     .IF eax != COMMON_OK
@@ -72,6 +71,7 @@ HandleLoginRequest PROC, sockfd: DWORD
         INVOKE Util_SendCode, sockfd, LOGIN_USER_UNKNOWN
         ret
     .ENDIF
+
     INVOKE IsPswdCorrect, ADDR userbuf, ADDR pswdbuf
     .IF eax != COMMON_OK
         @DEBUG B2
@@ -91,8 +91,8 @@ HandleRegisterRequest PROC, sockfd: DWORD
 
     INVOKE crt_memset, ADDR userbuf, 0, SIZEOF userbuf
     INVOKE crt_memset, ADDR pswdbuf, 0, SIZEOF pswdbuf
-    INVOKE Util_RecvStream, sockfd, ADDR userbuf
-    INVOKE Util_RecvStream, sockfd, ADDR pswdbuf
+    INVOKE Util_RecvString, sockfd, ADDR userbuf
+    INVOKE Util_RecvString, sockfd, ADDR pswdbuf
     INVOKE IsUserExist, ADDR userbuf
     @DEBUG C0
     .IF eax == COMMON_OK
@@ -104,6 +104,7 @@ HandleRegisterRequest PROC, sockfd: DWORD
     @DEBUG C2
     INVOKE StoreNewUser, ADDR userbuf, ADDR pswdbuf
     INVOKE Util_SendCode, sockfd, REGISTER_OK
+
     ret
 HandleRegisterRequest ENDP
 
@@ -118,8 +119,8 @@ HandleMessageRequest PROC, sockfd: DWORD
     INVOKE Util_Malloc, ADDR targetbuf, __HandleMessageRequest__BUFFERSIZE
     INVOKE Util_Malloc, ADDR messagebuf, __HandleMessageRequest__BUFFERSIZE
 
-    INVOKE Util_RecvStream, sockfd, targetbuf
-    INVOKE Util_RecvStream, sockfd, messagebuf
+    INVOKE Util_RecvString, sockfd, targetbuf
+    INVOKE Util_RecvString, sockfd, messagebuf
     ; TODO: Handle send message
 
     INVOKE Util_Free, targetbuf

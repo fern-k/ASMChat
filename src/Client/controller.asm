@@ -46,8 +46,8 @@ DispatchLogin PROC, user: PTR BYTE, pswd: PTR BYTE
 
     INVOKE GetSockfd, ADDR sockfd
     INVOKE Util_SendCode, sockfd, REQ_LOGIN
-    INVOKE Util_SendStream, sockfd, user
-    INVOKE Util_SendStream, sockfd, pswd
+    INVOKE Util_SendString, sockfd, user
+    INVOKE Util_SendString, sockfd, pswd
     @RET_FAILED_IF_SOCKET_ERROR
 
     @RET_OK
@@ -59,8 +59,8 @@ DispatchRegister PROC, user: PTR BYTE, pswd: PTR BYTE
 
     INVOKE GetSockfd, ADDR sockfd
     INVOKE Util_SendCode, sockfd, REQ_REGISTER
-    INVOKE Util_SendStream, sockfd, user
-    INVOKE Util_SendStream, sockfd, pswd
+    INVOKE Util_SendString, sockfd, user
+    INVOKE Util_SendString, sockfd, pswd
     @RET_FAILED_IF_SOCKET_ERROR
 
     @RET_OK
@@ -72,8 +72,8 @@ DispatchSendText PROC, targetUser: PTR BYTE, message: PTR BYTE
 
     INVOKE GetSockfd, ADDR sockfd
     INVOKE Util_SendCode, sockfd, REQ_MESSAGE
-    INVOKE Util_SendStream, sockfd, targetUser
-    INVOKE Util_SendStream, sockfd, message
+    INVOKE Util_SendString, sockfd, targetUser
+    INVOKE Util_SendString, sockfd, message
     @RET_FAILED_IF_SOCKET_ERROR
 
     @RET_OK

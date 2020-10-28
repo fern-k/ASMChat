@@ -38,16 +38,27 @@ Util_SendCode PROTO,
     sockfd: DWORD,
     code: DWORD
 ;------------------------------------
-; Util_SendStream:
+; Util_SendDWord:
 ; Args:
-;       sockfd -> target socket to send stream
-;       stream -> the byte stream to send
+;       sockfd -> target socket to send value
+;       value -> the dword to send
+; Rets:
+;       eax -> {  COMMON_OK, COMMON_FAILED  }
+;------------------------------------
+Util_SendDWord PROTO,
+    sockfd: DWORD,
+    value: DWORD
+;------------------------------------
+; Util_SendString:
+; Args:
+;       sockfd -> target socket to send string
+;       strbuf -> the string to send
 ; Rets:
 ;       eax -> {  COMMON_OK, COMMON_FAILED, Other special error code  }
 ;------------------------------------
-Util_SendStream PROTO,
+Util_SendString PROTO,
     sockfd: DWORD,
-    stream: PTR BYTE
+    strbuf: PTR BYTE
 ;------------------------------------
 ; Util_RecvCode:
 ; Args:
@@ -60,17 +71,28 @@ Util_RecvCode PROTO,
     sockfd: DWORD,
     codebuf: PTR DWORD
 ;------------------------------------
-; Util_RecvStream:
+; Util_RecvDWord:
 ; Args:
-;       sockfd -> target socket to recv stream
-;       streambuf -> the stream buffer
+;       sockfd -> target socket to recv value
+;       valuebuf -> the dword buffer
 ; Rets:
 ;       eax -> {  COMMON_OK, COMMON_FAILED  }
-;       ebx -> stream length
 ;------------------------------------
-Util_RecvStream PROTO,
+Util_RecvDWord PROTO,
     sockfd: DWORD,
-    streambuf: PTR BYTE
+    valuebuf: PTR DWORD
+;------------------------------------
+; Util_RecvString:
+; Args:
+;       sockfd -> target socket to recv string
+;       strbuf -> the string buffer
+; Rets:
+;       eax -> {  COMMON_OK, COMMON_FAILED  }
+;       ebx -> string length
+;------------------------------------
+Util_RecvString PROTO,
+    sockfd: DWORD,
+    strbuf: PTR BYTE
 ;------------------------------------
 ; Util_Malloc: Malloc a memory filled with 0.
 ; Args:

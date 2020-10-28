@@ -17,47 +17,63 @@ Util_CreateSocket ENDP
 
 Util_SendCode PROC, sockfd: DWORD, code: DWORD
 
-    INVOKE send, sockfd, ADDR code, TYPE DWORD, 0
-    @RET_FAILED_IF_SOCKET_ERROR
-    @RET_OK
+    INVOKE Util_SendDWord, sockfd, code
+    ret
 
 Util_SendCode ENDP
 
 
-Util_SendStream PROC, sockfd: DWORD, stream: PTR BYTE
-    LOCAL streamLength: DWORD
+Util_SendDWord PROC, sockfd: DWORD, value: DWORD
 
-    INVOKE crt_strlen, stream
-    mov    streamLength, eax
-    INVOKE send, sockfd, ADDR streamLength, TYPE DWORD, 0
-    @RET_FAILED_IF_SOCKET_ERROR
-    INVOKE send, sockfd, stream, streamLength, 0
+    INVOKE send, sockfd, ADDR value, TYPE DWORD, 0
     @RET_FAILED_IF_SOCKET_ERROR
     @RET_OK
 
-Util_SendStream ENDP
+Util_SendDWord ENDP
+
+
+Util_SendString PROC, sockfd: DWORD, strbuf: PTR BYTE
+    LOCAL stringLength: DWORD
+
+    INVOKE crt_strlen, strbuf
+    mov    stringLength, eax
+    INVOKE send, sockfd, ADDR stringLength, TYPE DWORD, 0
+    @RET_FAILED_IF_SOCKET_ERROR
+    INVOKE send, sockfd, strbuf, stringLength, 0
+    @RET_FAILED_IF_SOCKET_ERROR
+    @RET_OK
+
+Util_SendString ENDP
 
 
 Util_RecvCode PROC, sockfd: DWORD, codebuf: PTR DWORD
 
-    INVOKE recv, sockfd, codebuf, TYPE DWORD, 0
-    @RET_FAILED_IF_SOCKET_ERROR
-    @RET_OK
+    INVOKE Util_RecvDWord, sockfd, codebuf
+    ret
 
 Util_RecvCode ENDP
 
 
-Util_RecvStream PROC, sockfd: DWORD, streambuf: PTR BYTE
+Util_RecvDWord PROC, sockfd: DWORD, valuebuf: PTR DWORD
+
+    INVOKE recv, sockfd, valuebuf, TYPE DWORD, 0
+    @RET_FAILED_IF_SOCKET_ERROR
+    @RET_OK
+
+Util_RecvDWord ENDP
+
+
+Util_RecvString PROC, sockfd: DWORD, strbuf: PTR BYTE
     LOCAL reallen: DWORD
 
     INVOKE recv, sockfd, ADDR reallen, TYPE DWORD, 0
     @RET_FAILED_IF_SOCKET_ERROR
-    INVOKE recv, sockfd, streambuf, reallen, 0
+    INVOKE recv, sockfd, strbuf, reallen, 0
     @RET_FAILED_IF_SOCKET_ERROR
     mov    ebx, reallen
     @RET_OK
 
-Util_RecvStream ENDP
+Util_RecvString ENDP
 
 
 Util_Malloc PROC, bufpp: DWORD, requestlen: DWORD
