@@ -150,7 +150,12 @@ ENDM
 ENDM
 
 
-;;; Exit, Exit if not ok and Exit if invalid socket
+;;; Exit if zero, Exit if not ok and Exit if invalid socket
+@EXIT_FAILED_IF_ZERO MACRO
+    .IF eax == 0
+        INVOKE Util_Exit, 1
+    .ENDIF
+ENDM
 @EXIT_FAILED_IF_NOT_OK MACRO
     .IF eax != COMMON_OK
         INVOKE Util_Exit, 1
@@ -161,7 +166,6 @@ ENDM
         INVOKE Util_Exit, 1
     .ENDIF
 ENDM
-
 
 ;-------------- Const ---------------;
 .const

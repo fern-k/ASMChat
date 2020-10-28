@@ -3,21 +3,36 @@ IFNDEF DEBUG_HEADER
 DEBUG_HEADER PROTO
 
 
-;--------------- Debug ---------------;
 ; Example: @DEBUG A0
-; (See markers in bellow section)
-@DEBUG MACRO marker
+;          @DEBUG FMT_STRING_ENDL, ADDR str
+;          @DEBUG FMT_DWORD_ENDL, value
+@DEBUG MACRO formatter, arg
     pushad
-    INVOKE crt_printf, ADDR marker
+    IFB <arg>
+        INVOKE crt_printf, ADDR formatter
+    ELSE
+        INVOKE crt_printf, ADDR formatter, arg
+    ENDIF
     popad
 ENDM
 
-; Example: @DBPRINT FMT_DWORD_ENDL, a_dword_value
-; (See formatters in bellow section)
-@DBPRINT MACRO formatter, d
-    pushad
-    INVOKE crt_printf, ADDR formatter, d
-    popad
+; Example: @DEBUG_STR string
+; Do not add "ADDR" prefix to string
+@DEBUG_STR MACRO str
+    .data
+    strname BYTE "&str:", 0
+    .code
+    @DEBUG FMT_STRING_SP, ADDR strname
+    @DEBUG FMT_STRING_ENDL, ADDR str
+ENDM
+
+; Example: @DEBUG_DWORD a_dword_value
+@DEBUG_DWORD MACRO value
+    .data
+    valname BYTE "&value:", 0
+    .code
+    @DEBUG FMT_STRING_SP, ADDR valname
+    @DEBUG FMT_DWORD_ENDL, value
 ENDM
 
 
