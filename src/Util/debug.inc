@@ -16,22 +16,23 @@ DEBUG_HEADER PROTO
     popad
 ENDM
 
-; Example: @DEBUG_STR string
-; Do not add "ADDR" prefix to string
-@DEBUG_STR MACRO str
+; Example: @DEBUG_STRING ADDR string1
+@DEBUG_STRING MACRO str
+    LOCAL strname
     .data
-    strname BYTE "&str:", 0
+    strname BYTE "@DEBUG_STRING &str: ", 0
     .code
-    @DEBUG FMT_STRING_SP, ADDR strname
-    @DEBUG FMT_STRING_ENDL, ADDR str
+    @DEBUG FMT_STRING, ADDR strname
+    @DEBUG FMT_STRING_ENDL, str
 ENDM
 
 ; Example: @DEBUG_DWORD a_dword_value
 @DEBUG_DWORD MACRO value
+    LOCAL valname
     .data
-    valname BYTE "&value:", 0
+    valname BYTE "@DEBUG_DWORD &value: ", 0
     .code
-    @DEBUG FMT_STRING_SP, ADDR valname
+    @DEBUG FMT_STRING, ADDR valname
     @DEBUG FMT_DWORD_ENDL, value
 ENDM
 
