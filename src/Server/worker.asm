@@ -58,9 +58,13 @@ ClientCommunicateWorker ENDP
 
 
 HandleLoginRequest PROC, sockfd: DWORD
-    LOCAL userbuf[1024]: BYTE
-    LOCAL pswdbuf[1024]: BYTE
+    LOCAL userbuf[1024]:   BYTE
+    LOCAL pswdbuf[1024]:   BYTE
+    LOCAL friendbuf[1024]: BYTE
+    LOCAL friendNumb:      DWORD
 
+    INVOKE crt_memset, ADDR userbuf, 0, SIZEOF userbuf
+    INVOKE crt_memset, ADDR pswdbuf, 0, SIZEOF userbuf
     INVOKE Util_RecvString, sockfd, ADDR userbuf
     INVOKE Util_RecvString, sockfd, ADDR pswdbuf
 
@@ -81,6 +85,17 @@ HandleLoginRequest PROC, sockfd: DWORD
 
     @DEBUG B3
     INVOKE Util_SendCode, sockfd, LOGIN_OK
+    INVOKE GetFriendNumb, ADDR userbuf, ADDR friendNumb
+    INVOKE Util_SendDWord, sockfd, friendNumb
+    mov    ecx, 0
+    .WHILE ecx < friendNumb
+        INVOKE crt_memset, ADDR friendbuf, 0, SIZEOF friendbuf
+        INVOKE GetFriend, ADDR userbuf, ecx, ADDR friendbuf
+        INVOKE Util_SendString, sockfd, ADDR friendbuf
+        inc    ecx
+    .ENDW
+    ;TODO: notify friend online
+
     ret
 HandleLoginRequest ENDP
 

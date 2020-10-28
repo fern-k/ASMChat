@@ -14,7 +14,7 @@ ChatLinklistNode ENDS
 
 FriendModel STRUCT
     username BYTE 100 DUP(0)
-    status DWORD 0
+    isOnline DWORD 0
     chatListHeader ChatLinklistNode <>
 FriendModel ENDS
 
@@ -36,9 +36,8 @@ ClientModel ENDS
 GetSockfd              PROTO, sockbuf: PTR DWORD
 SetSockfd              PROTO, newsock: DWORD
 GetFriendList          PROTO, flistbuf: PTR DWORD
-AppendFriend           PROTO, newFriend: PTR FriendModel
-ChangeFriendStatus     PROTO, friendName: PTR BYTE, newStatus: DWORD
-ParseFriendList        PROTO, flistBuffer: PTR BYTE, flistBufLen: DWORD
+AppendFriend           PROTO, friendName: PTR BYTE
+ChangeFriendIsOnline   PROTO, friendName: PTR BYTE, newIsOnline: DWORD
 
 ;********* Client View Component *********;
 ViewEntry              PROTO

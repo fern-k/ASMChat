@@ -20,11 +20,11 @@ Main PROC
     @EXIT_FAILED_IF_ZERO
 
     ;---Test your function here.---
-    ;INVOKE DispatchLogin, ADDR user0, ADDR pswd0
-    ;INVOKE DispatchLogin, ADDR user0, ADDR pswd1
     INVOKE DispatchRegister, ADDR user0, ADDR pswd0
     INVOKE DispatchRegister, ADDR user404, ADDR pswd404
     INVOKE DispatchLogin, ADDR user404, ADDR pswd404
+    INVOKE DispatchLogin, ADDR user0, ADDR pswd0
+    ;INVOKE DispatchLogin, ADDR user0, ADDR pswd1
     .IF eax == COMMON_OK
         @DEBUG A1
     .ELSE

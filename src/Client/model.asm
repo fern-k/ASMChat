@@ -27,15 +27,31 @@ GetFriendList PROC, flistbuf: PTR DWORD
 GetFriendList ENDP
 
 
-AppendFriend PROC, newFriend: PTR FriendModel
-    mov eax, clientModelInstance.friendNumb
-    INVOKE crt_memcpy, clientModelInstance.friendList[eax], newFriend, SIZEOF FriendModel
-    inc clientModelInstance.friendNumb
+AppendFriend PROC, friendName: PTR BYTE
+    LOCAL target:  PTR FriendModel
+    LOCAL namelen: DWORD
+    .data
+    __AppendFriend__tempfriend FriendModel <>
+    .code
+
+
+    mov    __AppendFriend__tempfriend.isOnline, 0
+    INVOKE crt_strlen, friendName
+    mov    namelen, eax
+    INVOKE crt_memcpy, OFFSET __AppendFriend__tempfriend.username, friendName, namelen
+
+    mov    target, OFFSET clientModelInstance.friendList
+    mov    eax, SIZEOF FriendModel
+    mul    clientModelInstance.friendNumb
+    add    target, eax
+    INVOKE crt_memcpy, target, ADDR __AppendFriend__tempfriend, SIZEOF FriendModel
+
+    inc    clientModelInstance.friendNumb
     @RET_OK
 AppendFriend ENDP
 
 
-ChangeFriendStatus PROC USES ebx ecx edx, friendName: PTR BYTE, newStatus: DWORD
+ChangeFriendIsOnline PROC USES ebx ecx edx, friendName: PTR BYTE, newIsOnline: DWORD
     LOCAL currFriend: PTR FriendModel
 
     mov ecx, 0
@@ -50,33 +66,12 @@ ChangeFriendStatus PROC USES ebx ecx edx, friendName: PTR BYTE, newStatus: DWORD
             inc ecx
             .CONTINUE
         .ENDIF
-        INVOKE crt_memcpy, (FriendModel PTR currFriend).status, ADDR newStatus, TYPE DWORD
+        INVOKE crt_memcpy, (FriendModel PTR currFriend).isOnline, ADDR newIsOnline, TYPE DWORD
         @RET_OK
     .ENDW
 
     @RET_FAILED
-ChangeFriendStatus ENDP
-
-
-ParseFriendList PROC USES ebx ecx edx, flistBuffer: PTR BYTE, flistBufLen: DWORD
-    LOCAL flistLength:    DWORD
-    LOCAL currFriend:     PTR FriendModel
-
-    INVOKE Util_Div, flistBufLen, TYPE FriendModel
-    mov    flistLength, ebx
-
-    mov ecx, 0
-    .WHILE ecx < ebx
-        mov eax, TYPE FriendModel
-        mul ecx
-        add eax, flistBuffer
-        mov currFriend, eax
-        INVOKE AppendFriend, currFriend
-        inc ecx
-    .ENDW
-
-    @RET_OK
-ParseFriendList ENDP
+ChangeFriendIsOnline ENDP
 
 
 END

@@ -62,6 +62,10 @@ HandleMessageRequest PROTO,
 AppendNewClient PROTO,
     sockfd: DWORD
 PrintClientList PROTO
+GetClientName PROTO,
+    sockfd: DWORD
+GetClientSockfd PROTO,
+    username: PTR BYTE
 
 
 IsUserExist PROTO,
@@ -72,7 +76,13 @@ IsPswdCorrect PROTO,
 StoreNewUser PROTO,
     user: PTR BYTE,
     pswd: PTR BYTE
-
+GetFriendNumb PROTO,
+    user: PTR BYTE,
+    result: PTR DWORD
+GetFriend PROTO,
+    user: PTR BYTE,
+    index: DWORD,
+    result: PTR BYTE
 
 
 

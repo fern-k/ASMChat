@@ -107,12 +107,9 @@ DealwithServerMessage ENDP
 
 
 DealwithLoginResponse PROC, code: DWORD
-    LOCAL sockfd:        DWORD
-    LOCAL friendlistbuf: PTR BYTE
-    LOCAL friendlistlen: DWORD
-    .data
-    __DealwithLoginResponse__BUFFERSIZE DWORD 10 * 1024 * 1024
-    .code
+    LOCAL sockfd:          DWORD
+    LOCAL friendNumb:      DWORD
+    LOCAL friendbuf[1024]: BYTE
 
     mov eax, code
     .IF eax != LOGIN_OK
@@ -120,15 +117,17 @@ DealwithLoginResponse PROC, code: DWORD
         @RET_FAILED
     .ENDIF
 
-    INVOKE Util_Malloc, ADDR friendlistbuf, __DealwithLoginResponse__BUFFERSIZE
-
     INVOKE GetSockfd, ADDR sockfd
-    INVOKE Util_RecvStream, sockfd, friendlistbuf
-    mov    friendlistlen, ebx
-    INVOKE ParseFriendList, friendlistbuf, friendlistlen
+    INVOKE Util_RecvDWord, sockfd, ADDR friendNumb
+    mov    ecx, 0
+    .WHILE ecx < friendNumb
+        INVOKE crt_memset, ADDR friendbuf, 0, SIZEOF friendbuf
+        INVOKE Util_RecvString, sockfd, ADDR friendbuf
+        INVOKE AppendFriend, ADDR friendbuf
+        inc    ecx
+    .ENDW
     INVOKE LoginCallback, code
 
-    INVOKE Util_Free, friendlistbuf
     @RET_OK
 DealwithLoginResponse ENDP
 
