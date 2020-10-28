@@ -13,7 +13,7 @@ ServerListenWorker PROC, sockfd: DWORD
         mov    clientSockfd, eax
         INVOKE AppendNewClient, clientSockfd
         INVOKE CreateThread, NULL, 0, OFFSET ClientCommunicateWorker, clientSockfd, 0, NULL
-        @EXIT_FAILED_IF_NOT_ZERO
+        @EXIT_FAILED_IF_ZERO
     .ENDW
 
     INVOKE closesocket, sockfd
@@ -66,6 +66,7 @@ HandleLoginRequest PROC, sockfd: DWORD
     INVOKE Util_RecvStream, sockfd, ADDR userbuf
     INVOKE Util_RecvStream, sockfd, ADDR pswdbuf
     INVOKE IsUserExist, ADDR userbuf
+    @DEBUG B0
     .IF eax != COMMON_OK
         @DEBUG B1
         INVOKE Util_SendCode, sockfd, LOGIN_USER_UNKNOWN
@@ -93,6 +94,7 @@ HandleRegisterRequest PROC, sockfd: DWORD
     INVOKE Util_RecvStream, sockfd, ADDR userbuf
     INVOKE Util_RecvStream, sockfd, ADDR pswdbuf
     INVOKE IsUserExist, ADDR userbuf
+    @DEBUG C0
     .IF eax == COMMON_OK
         @DEBUG C1
         INVOKE Util_SendCode, sockfd, REGISTER_USER_EXIST
@@ -154,7 +156,7 @@ PrintClientList PROC USES ecx
     online_str  BYTE "online", 0
     offline_str BYTE "offline", 0
     .code
- 
+
     INVOKE crt_printf, ADDR fmt_header
     mov    ecx, 0
     mov    curr, OFFSET serverModelInstance.clients
