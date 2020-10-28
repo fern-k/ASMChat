@@ -10,8 +10,10 @@ ServerListenWorker PROC, sockfd: DWORD
     .WHILE TRUE
         INVOKE accept, sockfd, NULL, 0
         @EXIT_FAILED_IF_INVALID_SOCKET
-        mov clientSockfd, eax
+        mov    clientSockfd, eax
+        INVOKE AppendNewClient, clientSockfd
         INVOKE CreateThread, NULL, 0, OFFSET ClientCommunicateWorker, clientSockfd, 0, NULL
+        @EXIT_FAILED_IF_NOT_ZERO
     .ENDW
 
     INVOKE closesocket, sockfd
@@ -123,6 +125,55 @@ HandleMessageRequest PROC, sockfd: DWORD
     ret
 HandleMessageRequest ENDP
 
+
+AppendNewClient PROC, sockfd: DWORD
+    LOCAL target: PTR ClientData
+
+    mov    target, OFFSET serverModelInstance.clients
+    mov    eax, SIZEOF ClientData
+    mul    serverModelInstance.clientNumb
+    add    target, eax
+    INVOKE crt_memset, target, 0, SIZEOF ClientData
+    INVOKE crt_memcpy, (ClientData PTR target).sockfd, ADDR sockfd, TYPE DWORD
+    mov    (ClientData PTR target).isOnline, 0
+    inc    serverModelInstance.clientNumb
+
+    INVOKE PrintClientList
+    ret
+AppendNewClient ENDP
+
+
+PrintClientList PROC USES ecx
+    LOCAL curr: PTR ClientData
+    LOCAL stat: PTR BYTE
+    .data
+    temp_client ClientData <>
+    fmt_header  BYTE "----------PRINT CLIENT LIST----------", 0dh, 0ah, 0
+    fmt_footer  BYTE "-------------------------------------", 0dh, 0ah, 0
+    fmt_row     BYTE "%d %d %s %s", 0dh, 0ah, 0
+    online_str  BYTE "online", 0
+    offline_str BYTE "offline", 0
+    .code
+ 
+    INVOKE crt_printf, ADDR fmt_header
+    mov    ecx, 0
+    mov    curr, OFFSET serverModelInstance.clients
+    .WHILE ecx < serverModelInstance.clientNumb
+        INVOKE crt_memcpy, ADDR temp_client, curr, SIZEOF ClientData
+        .IF temp_client.isOnline == 0
+            mov stat, OFFSET offline_str
+        .ELSE
+            mov stat, OFFSET online_str
+        .ENDIF
+        INVOKE crt_printf, ADDR fmt_row, ecx, temp_client.sockfd, OFFSET temp_client.username, stat
+
+        add curr, SIZEOF ClientData
+        inc ecx
+    .ENDW
+
+    INVOKE crt_printf, ADDR fmt_footer
+    ret
+PrintClientList ENDP
 
 
 END

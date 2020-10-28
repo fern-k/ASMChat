@@ -8,12 +8,14 @@ INCLUDE Util/debug.inc
 
 
 ClientData STRUCT
-    sockfd DWORD 0
-    username BYTE 100 DUP(0)
+    sockfd   DWORD 0
+    username BYTE  100 DUP(0)
+    isOnline DWORD 0
 ClientData ENDS
 
 ServerModel STRUCT
-    clients ClientData 100 DUP(<>)
+    clients    ClientData 100 DUP(<>)
+    clientNumb DWORD      0
 ServerModel ENDS
 
 ;------------------------------------
@@ -56,6 +58,12 @@ HandleRegisterRequest PROTO,
     sockfd: DWORD
 HandleMessageRequest PROTO,
     sockfd: DWORD
+
+AppendNewClient PROTO,
+    sockfd: DWORD
+PrintClientList PROTO
+
+
 IsUserExist PROTO,
     user: PTR BYTE
 IsPswdCorrect PROTO,
